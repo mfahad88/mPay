@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_payment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0273BC"
+    tools:context="com.example.bipl.mpay.PaymentActivity">
+
+    <RelativeLayout
+        android:layout_marginTop="15sp"
+        android:layout_marginRight="15sp"
+        android:layout_marginLeft="15sp"
+        android:layout_width="match_parent"
+        android:layout_height="170sp"
+        android:background="@android:color/white"
+        android:id="@+id/layoutHeader">
+        <ImageView
+            android:layout_marginTop="5sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/mpay_logo"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="0dp"
+        android:layout_margin="0dp"
+        android:layout_below="@+id/layoutHeader"
+        android:background="@drawable/background">
+    <TableLayout
+        android:layout_marginTop="13sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tableLayout">
+
+  <!--      <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:text="@string/enter_amount_and_cnic_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/textColor"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:gravity="center_horizontal|center_vertical"
+                android:id="@+id/textViewTitle" />
+        </TableRow>-->
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="18sp"
+            android:layout_marginRight="18sp">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/textColor">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Amount"
+                    android:focusable="false"
+                    android:textColor="@color/textColor"
+                    android:textColorHint="@color/textColor"
+                    android:singleLine="true"
+                    android:ems="15"
+                    android:inputType="numberDecimal"
+                    android:layout_marginLeft="5sp"
+                    android:layout_marginRight="5sp"
+                    android:id="@+id/edittextAmount"
+                    />
+            </android.support.design.widget.TextInputLayout>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="18sp"
+            android:layout_marginRight="18sp">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_marginTop="5sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/textColor">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/cnic"
+                    android:textColor="@color/textColor"
+                    android:textColorHint="@color/textColor"
+                    android:singleLine="true"
+                    android:focusable="false"
+                    android:ems="15"
+                    android:inputType="number"
+                    android:layout_marginLeft="5sp"
+                    android:layout_marginRight="5sp"
+                    android:id="@+id/edittextCNIC"
+                    />
+            </android.support.design.widget.TextInputLayout>
+        </TableRow>
+
+    </TableLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tableLayout"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+        <include layout="@layout/layout_pinpad"/>
+    </RelativeLayout>
+    </RelativeLayout>
+</RelativeLayout>

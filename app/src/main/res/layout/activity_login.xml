@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_login"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0273BC"
+    tools:context="com.example.bipl.mpay.LoginActivity">
+    <RelativeLayout
+        android:layout_marginTop="15sp"
+        android:layout_marginRight="15sp"
+        android:layout_marginLeft="15sp"
+        android:layout_width="match_parent"
+        android:layout_height="170sp"
+        android:background="@android:color/white"
+        android:id="@+id/layoutHeader">
+        <ImageView
+            android:layout_marginTop="5sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/mpay_logo"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/layoutHeader"
+        android:background="@drawable/background">
+    <TableLayout
+        android:layout_marginTop="30sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tableLayout">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:text="@string/merchant_sign_in"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/textColor"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:gravity="center_horizontal"
+                android:id="@+id/textViewTitle" />
+        </TableRow>
+
+        <TableRow
+            android:layout_marginTop="25sp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="18sp"
+            android:layout_marginRight="18sp">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/textColor">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/username"
+                    android:textColor="@color/textColor"
+                    android:textColorHint="@color/textColor"
+                    android:singleLine="true"
+                    android:ems="15"
+                    android:layout_marginLeft="5sp"
+                    android:layout_marginRight="5sp"
+                    android:id="@+id/edittextUsername"
+                    />
+            </android.support.design.widget.TextInputLayout>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10sp"
+            android:layout_marginLeft="18sp"
+            android:layout_marginRight="18sp">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/textColor">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/password"
+                    android:textColor="@color/textColor"
+                    android:textColorHint="@color/textColor"
+                    android:singleLine="true"
+                    android:ems="15"
+                    android:inputType="textPassword"
+                    android:layout_marginLeft="5sp"
+                    android:layout_marginRight="5sp"
+                    android:id="@+id/edittextPassword"
+                    />
+            </android.support.design.widget.TextInputLayout>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="20sp">
+
+            <Button
+                android:text="@string/login"
+                android:layout_below="@+id/tableLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30sp"
+                android:layout_marginRight="30sp"
+                android:textColor="@color/textColor"
+                android:background="@drawable/button_border"
+                android:id="@+id/buttonLogin" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="20sp">
+
+            <TextView
+                android:text="Forgot Password?"
+                android:gravity="center_horizontal"
+                android:textColor="@color/textColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textViewForgot" />
+        </TableRow>
+    </TableLayout>
+        </RelativeLayout>
+</RelativeLayout>

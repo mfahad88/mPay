@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">mPay</string>
+    <string name="merchant_sign_in">Merchant Sign in</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="enter_amount_and_cnic_number">Enter Amount and CNIC Number</string>
+    <string name="cnic">CNIC</string>
+    <string name="done">Done</string>
+    <string name="login">Login</string>
+    <string name="please_put_your_thumb">Please put your Thumb</string>
+    <string name="verify">Verify</string>
+    <string name="number_zero">0</string>
+    <string name="number_one">1</string>
+    <string name="number_two">2</string>
+    <string name="number_three">3</string>
+    <string name="number_four">4</string>
+    <string name="number_five">5</string>
+    <string name="number_six">6</string>
+    <string name="number_seven">7</string>
+    <string name="number_eight">8</string>
+    <string name="number_nine">9</string>
+    <string name="btn_reset">Reset</string>
+    <string name="btn_backspace">Back</string>
+    <string name="number_dot">.</string>
+    <string name="ok">Ok</string>
+    <string name="btn_done">Done</string>
+</resources>

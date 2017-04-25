@@ -102,7 +102,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 edit_amount.setText(null);
                 edit_cnic.setText(null);
                 focusCheck=0;
-                initViews();
+                initViews()
             }
             break;
         }

@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class AccountActivity extends AppCompatActivity {
+public class AccountActivity extends AppCompatActivity implements View.OnClickListener {
     TextView tv_title;
     EditText edtName,edtCNIC;
     Button btn_verify;
@@ -26,13 +26,15 @@ public class AccountActivity extends AppCompatActivity {
         edtName.setTypeface(typeface);
         edtCNIC.setTypeface(typeface);
         btn_verify.setTypeface(typeface);
-        btn_verify.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(AccountActivity.this,TransactionActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-        });
+        btn_verify.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId()==R.id.buttonVerify){
+            Intent intent=new Intent(AccountActivity.this,TransactionActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
     }
 }

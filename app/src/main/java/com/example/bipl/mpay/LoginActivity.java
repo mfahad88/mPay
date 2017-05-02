@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bipl.app.ApplicationManager;
+import com.example.bipl.data.UserLoginBean;
 import com.google.gson.Gson;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -24,6 +25,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     EditText edt_username,edt_password;
     Button btn_login;
     public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final int CONTEXT=Context.MODE_PRIVATE;
     SharedPreferences sharedpreferences;
 
     @Override
@@ -36,7 +38,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         edt_username=(EditText)findViewById(R.id.edittextUsername);
         edt_password=(EditText)findViewById(R.id.edittextPassword);
         btn_login=(Button)findViewById(R.id.buttonLogin);
-        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        sharedpreferences = getSharedPreferences(MyPREFERENCES,CONTEXT);
         Typeface typeface=Typeface.createFromAsset(getAssets(), "font/palatino-linotype.ttf");
         tv_title.setTypeface(typeface);
         tv_forgot.setTypeface(typeface);
@@ -50,13 +52,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+
+    @Override
+    protected void onDestroy() {
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.clear();
+        editor.commit();
+    }
+
     @Override
     public void onClick(View v) {
        if(v.getId()==R.id.buttonLogin){
            new loginAsync().execute(edt_username.getText().toString(),edt_password.getText().toString());
-          /* Intent intent=new Intent(LoginActivity.this,PaymentActivity.class);
-           intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-           startActivity(intent);*/
        }
     }
 
@@ -69,12 +76,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             String password=params[1];
             Integer appId=1;
             Boolean status=false;
+
             SharedPreferences.Editor editor = sharedpreferences.edit();
             Gson gson = new Gson();
-            String json=gson.toJson(ApplicationManager.Login(userName,password,appId));
-            editor.putString("UserLoginBean",json);
-            if(!json.equals(null)){
-                status=true;
+            UserLoginBean loginBean=ApplicationManager.Login(userName,password,appId);
+            if(Integer.parseInt(loginBean.getErrorCode())==0 && loginBean.getStatus()==1) {
+                String json = gson.toJson(loginBean);
+                editor.putString("UserLoginBean", json);
+                if (!json.equals(null)) {
+                    status = true;
+                }
+                editor.commit();
             }
             return status;
         }
@@ -91,7 +103,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
-            progressDialog.dismiss();
+            Toast.makeText(LoginActivity.this, aBoolean.toString(), Toast.LENGTH_SHORT).show();
+            if(aBoolean==true){
+                progressDialog.dismiss();
+                Intent i=new Intent(LoginActivity.this,PaymentActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+            }else{
+                progressDialog.cancel();
+            }
         }
 
     }

@@ -1,22 +1,41 @@
 package com.example.bipl.mpay;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.support.annotation.IdRes;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bipl.app.ApplicationManager;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class PaymentActivity extends AppCompatActivity implements View.OnClickListener {
     int focusCheck=0;
     EditText edit_amount,edit_cnic;
+    SharedPreferences sharedpreferences;
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @SuppressLint("LongLogTag")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,9 +48,12 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         initViews();
 
 
+
+
     }
 
     private void initViews() {
+        sharedpreferences = getSharedPreferences(LoginActivity.MyPREFERENCES,LoginActivity.CONTEXT);
         edit_amount = $(R.id.edittextAmount);
         edit_cnic   = $(R.id.edittextCNIC);
         $(R.id.t9_key_0).setOnClickListener(this);
@@ -116,15 +138,46 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         }
         if(focusCheck==2) {
             if (!TextUtils.isEmpty(edit_amount.getText().toString()) && edit_cnic.getText().length()==15) {
-            Intent intent=new Intent(PaymentActivity.this,FingerActivity.class);
+                Map<String, ?> map=new HashMap<>();
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putString("amount",edit_amount.getText().toString());
+                editor.putString("cnic",edit_cnic.getText().toString());
+                editor.putString("description","testing");
+                editor.putString("processCode",String.valueOf(0));
+                editor.putString("productId",String.valueOf(1));
+                map=sharedpreferences.getAll();
+                new Trxasync().execute(map);
+          /*  Intent intent=new Intent(PaymentActivity.this,FingerActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                startActivity(intent);*/
             } else {
                 focusCheck=0;
                 edit_amount.setBackgroundDrawable(getResources().getDrawable(R.drawable.border));
                 edit_cnic.setBackgroundDrawable(getResources().getDrawable(R.drawable.border_gray));
                 Toast.makeText(this, "Please check amount and cnic..", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    public class Trxasync extends AsyncTask<Map<String,?>,Void,String>{
+        ProgressDialog progressDialog;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog.setTitle("Loading...");
+            progressDialog.setMessage("Validating CNIC....");
+            progressDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(Map<String, ?>... params) {
+            Log.e("MAP>>>>>>>",params.toString());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
         }
     }
 }

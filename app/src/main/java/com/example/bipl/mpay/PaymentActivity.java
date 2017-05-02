@@ -3,6 +3,7 @@ package com.example.bipl.mpay;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bipl.app.ApplicationManager;
+import com.example.bipl.data.TrxBean;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,9 +35,9 @@ import java.util.Map;
 public class PaymentActivity extends AppCompatActivity implements View.OnClickListener {
     int focusCheck=0;
     EditText edit_amount,edit_cnic;
-    SharedPreferences sharedpreferences;
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    @SuppressLint("LongLogTag")
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +55,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initViews() {
-        sharedpreferences = getSharedPreferences(LoginActivity.MyPREFERENCES,LoginActivity.CONTEXT);
+
         edit_amount = $(R.id.edittextAmount);
         edit_cnic   = $(R.id.edittextCNIC);
         $(R.id.t9_key_0).setOnClickListener(this);
@@ -138,15 +140,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         }
         if(focusCheck==2) {
             if (!TextUtils.isEmpty(edit_amount.getText().toString()) && edit_cnic.getText().length()==15) {
-                Map<String, ?> map=new HashMap<>();
-                SharedPreferences.Editor editor = sharedpreferences.edit();
-                editor.putString("amount",edit_amount.getText().toString());
-                editor.putString("cnic",edit_cnic.getText().toString());
-                editor.putString("description","testing");
-                editor.putString("processCode",String.valueOf(0));
-                editor.putString("productId",String.valueOf(1));
-                map=sharedpreferences.getAll();
-                new Trxasync().execute(map);
+
+
+                new Trxasync().execute();
           /*  Intent intent=new Intent(PaymentActivity.this,FingerActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);*/
@@ -159,25 +155,50 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    public class Trxasync extends AsyncTask<Map<String,?>,Void,String>{
+    public class Trxasync extends AsyncTask<Void,Void,Boolean> {
         ProgressDialog progressDialog;
+        TrxBean trxBean=new TrxBean();
+
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            ApplicationManager.Account_TRX(trxBean);
+            return true;
+        }
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            SharedPreferences sharedpreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+            trxBean.setAmount(Double.parseDouble(edit_amount.getText().toString()));
+            trxBean.setAppId(1);
+            trxBean.setCnic(edit_cnic.getText().toString().replaceAll("-",""));
+            trxBean.setDescription("testing");
+            trxBean.setErrorCode(sharedpreferences.getInt("errorCode",1));
+            trxBean.setProcessCode(0);
+            trxBean.setProductId(1);
+            trxBean.setToken(sharedpreferences.getString("token",""));
+            trxBean.setmId(sharedpreferences.getString("mId",""));
+            trxBean.setoId(sharedpreferences.getString("oId",""));
+            trxBean.setuId(sharedpreferences.getString("uId",""));
+            progressDialog=new ProgressDialog(PaymentActivity.this);
             progressDialog.setTitle("Loading...");
-            progressDialog.setMessage("Validating CNIC....");
+            progressDialog.setMessage("Validating CNIC...");
             progressDialog.show();
         }
 
         @Override
-        protected String doInBackground(Map<String, ?>... params) {
-            Log.e("MAP>>>>>>>",params.toString());
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            if(aBoolean){
+                progressDialog.dismiss();
+                Intent i=new Intent(PaymentActivity.this,AccountActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+            }else{
+                progressDialog.dismiss();
+            }
         }
     }
+
 }

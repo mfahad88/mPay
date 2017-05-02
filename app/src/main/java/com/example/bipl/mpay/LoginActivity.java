@@ -55,9 +55,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     protected void onDestroy() {
-        SharedPreferences.Editor editor = sharedpreferences.edit();
+ /*       SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.clear();
-        editor.commit();
+        editor.commit();*/
     }
 
     @Override

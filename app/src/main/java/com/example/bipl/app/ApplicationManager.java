@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 
+import com.example.bipl.data.TrxBean;
 import com.example.bipl.data.UserBean;
 import com.example.bipl.data.UserLoginBean;
 
@@ -88,22 +89,26 @@ public class ApplicationManager {
         return userLoginBean;
     }
 
-    @SuppressLint("LongLogTag")
-    public static void Account_TRX(Map<String,?> map){
+
+    public static Boolean Account_TRX(TrxBean trxBean){
         String METHOD_NAME = "ACCOUNT_TRX";
         String SOAP_ACTION = "http://ws.bi.com/";
+        Boolean status=false;
         try{
             SoapObject request=new SoapObject(NAMESPACE,METHOD_NAME);
             SoapObject object=new SoapObject();
-
-            object.addProperty("amount",map.get("amount"));
+            Log.e("TRX",trxBean.toString());
+        /*    object.addProperty("amount",map.get("amount"));
+            object.addProperty("appId",map.get("appId"));
             object.addProperty("cnic",map.get("cnic"));
             object.addProperty("description",map.get("description"));
             object.addProperty("errorCode",map.get("errorCode"));
+            object.addProperty("errorDesc","");
             object.addProperty("processCode",map.get("processCode"));
             object.addProperty("productId",map.get("productId"));
-            object.addProperty("thumb",map.get("thumb"));
+            object.addProperty("thumb","");
             object.addProperty("token",map.get("token"));
+            object.addProperty("trxNo","");
             object.addProperty("mId",map.get("mId"));
             object.addProperty("oId",map.get("oId"));
             object.addProperty("uId",map.get("uId"));
@@ -118,11 +123,16 @@ public class ApplicationManager {
             list.add(new HeaderProperty("pass","adnan123"));
             httpTransportSE.call(SOAP_ACTION, envelope,list);
             SoapObject soapObject=(SoapObject)envelope.getResponse();
-            Log.e(">>>>>>>SoapObject<<<<<<<<<",soapObject.toString());
+            Log.e(">>>>>>>SoapObject<<<<<<<<<",soapObject.toString());*/
+            /*if(Integer.parseInt(soapObject.getPropertyAsString("errorCode"))==0 && Integer.parseInt(soapObject.getPropertyAsString("processCode"))==1){
+                status=true;
+
+            }*/
+
         }catch (Exception e){
             e.printStackTrace();
         }
-        Log.e(">>>>>>>MAP<<<<<<<<",map.toString());
+        return status;
     }
 
     public static void helloWorld(String name){

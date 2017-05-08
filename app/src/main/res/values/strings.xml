@@ -26,4 +26,5 @@
     <string name="btn_done">Done</string>
     <string name="loyality">Loyality</string>
     <string name="account">Account</string>
+    <string name="cancel_transaction">Cancel Transaction</string>
 </resources>

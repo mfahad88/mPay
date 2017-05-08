@@ -8,7 +8,6 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:orientation="vertical"
-
         android:divider="@drawable/keyboard_divider"
         android:showDividers="beginning|middle|end">
 

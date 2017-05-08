@@ -1,5 +1,6 @@
 package com.example.bipl.app;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 
 
@@ -12,14 +13,17 @@ import com.example.bipl.data.UserLoginBean;
 
 import org.ksoap2.HeaderProperty;
 import org.ksoap2.SoapEnvelope;
+import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 
 import org.ksoap2.serialization.SoapSerializationEnvelope;
+import org.ksoap2.transport.HttpResponseException;
 import org.ksoap2.transport.HttpTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,40 +34,41 @@ import java.util.List;
 
 public class ApplicationManager {
     private final static String NAMESPACE = "http://ws.bi.com/";
-    private final static String URL = "http://10.7.255.77:59084/BIPOS_WS/BiPosWSService";
+    private final static String URL = "http://192.168.161.1:59084/BIPOS_WS/BiPosWSService";
 
 
-    public static UserLoginBean Login(String username,String password,Integer appId){
+    @SuppressLint("LongLogTag")
+    public static UserLoginBean Login(String username, String password, Integer appId){
 
         String METHOD_NAME = "LOGIN";
         String SOAP_ACTION = "http://ws.bi.com/";
         UserLoginBean userLoginBean=new UserLoginBean();
         UserBean userBean=new UserBean();
-        try{
+        try {
 
 
-            SoapObject request=new SoapObject(NAMESPACE,METHOD_NAME);
-            SoapObject object=new SoapObject();
+            SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
+            SoapObject object = new SoapObject();
 
-            object.addProperty("appId",appId);
-            object.addProperty("loginId",username);
-            object.addProperty("password",password);
-            request.addProperty("arg0",object);
+            object.addProperty("appId", appId);
+            object.addProperty("loginId", username);
+            object.addProperty("password", password);
+            request.addProperty("arg0", object);
 
             SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
             envelope.setOutputSoapObject(request);
-            HttpTransportSE httpTransportSE=new HttpTransportSE(URL,5000);
-            Thread.sleep(2000);
-            httpTransportSE.debug=true;
-            List<HeaderProperty> list=new ArrayList<>();
-            list.add(new HeaderProperty("uname","adnan"));
-            list.add(new HeaderProperty("pass","adnan123"));
-            httpTransportSE.call(SOAP_ACTION, envelope,list);
-            SoapObject soapObject=(SoapObject)envelope.getResponse();
+            HttpTransportSE httpTransportSE = new HttpTransportSE(URL, 5000);
+            //Thread.sleep(2000);
+            httpTransportSE.debug = true;
+            List<HeaderProperty> list = new ArrayList<>();
+            list.add(new HeaderProperty("uname", "adnan"));
+            list.add(new HeaderProperty("pass", "adnan123"));
+            httpTransportSE.call(SOAP_ACTION, envelope, list);
+            SoapObject soapObject = (SoapObject) envelope.getResponse();
 
-            if(Integer.parseInt(soapObject.getPropertyAsString("errorCode"))==0 && Integer.parseInt(soapObject.getPropertyAsString("status"))==1) {
-                Log.e("TOKEN",soapObject.getPropertyAsString("token"));
-                SoapObject soapobjectUser=(SoapObject)soapObject.getProperty("user");
+            if (Integer.parseInt(soapObject.getPropertyAsString("errorCode")) == 0 && Integer.parseInt(soapObject.getPropertyAsString("status")) == 1) {
+                Log.e("TOKEN", soapObject.getPropertyAsString("token"));
+                SoapObject soapobjectUser = (SoapObject) soapObject.getProperty("user");
                 userLoginBean.setAppId(Integer.parseInt(soapObject.getPropertyAsString("appId")));
                 userLoginBean.setErrorCode(soapObject.getPropertyAsString("errorCode"));
                 userLoginBean.setErrorDesc(soapObject.getPropertyAsString("errorDesc"));
@@ -80,14 +85,27 @@ public class ApplicationManager {
                 userBean.setoId(soapobjectUser.getPropertyAsString("oId"));
                 userBean.setuId(soapobjectUser.getPropertyAsString("uId"));
                 userLoginBean.setUser(userBean);
-            }else{
+            } else {
                 userLoginBean.setAppId(Integer.parseInt(soapObject.getPropertyAsString("appId")));
                 userLoginBean.setErrorCode(soapObject.getPropertyAsString("errorCode"));
                 userLoginBean.setErrorDesc(soapObject.getPropertyAsString("errorDesc"));
                 userLoginBean.setStatus(Integer.parseInt(soapObject.getPropertyAsString("status")));
             }
 
-        }catch (Exception e){
+        } catch (HttpResponseException e) {
+            Log.e("HttpResponseException>>>>>>>",e.getMessage());
+            e.printStackTrace();
+        } catch (SoapFault soapFault) {
+            Log.e("SoapFault>>>>>>>",soapFault.getMessage());
+            soapFault.printStackTrace();
+        } catch (XmlPullParserException e) {
+            Log.e("XmlPullParserException>>>>>>>",e.getMessage());
+            e.printStackTrace();
+        } catch (IOException e) {
+            userLoginBean.setErrorDesc(e.getMessage());
+            userLoginBean.setErrorCode("-1");
+            userLoginBean.setStatus(-1);
+            Log.e("IOException>>>>>>>",e.getMessage());
             e.printStackTrace();
         }
 
@@ -101,38 +119,38 @@ public class ApplicationManager {
         String SOAP_ACTION = "http://ws.bi.com/";
         AccountBean accountBean = null;
 
-        try{
-            SoapObject request=new SoapObject(NAMESPACE,METHOD_NAME);
-            SoapObject object=new SoapObject();
+        try {
+            SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
+            SoapObject object = new SoapObject();
 
 
-            object.addProperty("appId",trxBean.getAppId());
-            object.addProperty("cnic",trxBean.getCnic());
-            object.addProperty("thumb","");
-            object.addProperty("flag",trxBean.getFlag());
-            object.addProperty("token",trxBean.getToken());
-            object.addProperty("mId",trxBean.getmId());
-            object.addProperty("oId",trxBean.getoId());
-            object.addProperty("uId",trxBean.getuId());
-            object.addProperty("amount",trxBean.getAmount());
-            object.addProperty("processCode",trxBean.getProcessCode());
-            object.addProperty("productId",trxBean.getProductId());
-            object.addProperty("description",trxBean.getDescription());
-            request.addProperty("arg0",object);
+            object.addProperty("appId", trxBean.getAppId());
+            object.addProperty("cnic", trxBean.getCnic());
+            object.addProperty("thumb", "");
+            object.addProperty("flag", trxBean.getFlag());
+            object.addProperty("token", trxBean.getToken());
+            object.addProperty("mId", trxBean.getmId());
+            object.addProperty("oId", trxBean.getoId());
+            object.addProperty("uId", trxBean.getuId());
+            object.addProperty("amount", trxBean.getAmount());
+            object.addProperty("processCode", trxBean.getProcessCode());
+            object.addProperty("productId", trxBean.getProductId());
+            object.addProperty("description", trxBean.getDescription());
+            request.addProperty("arg0", object);
 
 
             SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
             envelope.setOutputSoapObject(request);
-            HttpTransportSE httpTransportSE=new HttpTransportSE(URL);
-            httpTransportSE.debug=true;
-            List<HeaderProperty> list=new ArrayList<>();
-            list.add(new HeaderProperty("uname","adnan"));
-            list.add(new HeaderProperty("pass","adnan123"));
+            HttpTransportSE httpTransportSE = new HttpTransportSE(URL);
+            httpTransportSE.debug = true;
+            List<HeaderProperty> list = new ArrayList<>();
+            list.add(new HeaderProperty("uname", "adnan"));
+            list.add(new HeaderProperty("pass", "adnan123"));
 
-            httpTransportSE.call(SOAP_ACTION, envelope,list);
-            SoapObject soapObject=(SoapObject)envelope.getResponse();
-            Log.e("Response>>>>>>>>>>",soapObject.toString());
-            if(trxBean.getFlag().equalsIgnoreCase("DF")) {
+            httpTransportSE.call(SOAP_ACTION, envelope, list);
+            SoapObject soapObject = (SoapObject) envelope.getResponse();
+            Log.e("Response>>>>>>>>>>", soapObject.toString());
+            if (trxBean.getFlag().equalsIgnoreCase("DF")) {
                 accountBean = new AccountBean();
                 if (Integer.parseInt(soapObject.getPropertyAsString("errorCode")) == 0) {
                     accountBean.setAccNum(soapObject.getPropertyAsString("accNum"));
@@ -142,7 +160,7 @@ public class ApplicationManager {
                     accountBean.setErrorDesc(soapObject.getPropertyAsString("errorDesc"));
                     accountBean.setPoints(soapObject.getPropertyAsString("points"));
                     accountBean.setPointsWorth(soapObject.getPropertyAsString("pointsWorth"));
-                }else{
+                } else {
                     accountBean.setAppId(Integer.parseInt(soapObject.getPropertyAsString("appId")));
                     accountBean.setErrorCode(soapObject.getPropertyAsString("errorCode"));
                     accountBean.setErrorDesc(soapObject.getPropertyAsString("errorDesc"));
@@ -150,7 +168,7 @@ public class ApplicationManager {
                     accountBean.setThumb(Byte.parseByte(soapObject.getPropertyAsString("thumb")));
                 }
             }
-            if(trxBean.getFlag().equalsIgnoreCase("TRX")) {
+            if (trxBean.getFlag().equalsIgnoreCase("TRX")) {
                 accountBean = new AccountBean();
                 if (Integer.parseInt(soapObject.getPropertyAsString("errorCode")) == 0) {
                     accountBean.setAmount(soapObject.getPropertyAsString("amount"));
@@ -167,7 +185,7 @@ public class ApplicationManager {
                     accountBean.setoId(soapObject.getPropertyAsString("oId"));
                     accountBean.setuId(soapObject.getPropertyAsString("uId"));
 
-                }else{
+                } else {
                     accountBean.setAppId(Integer.parseInt(soapObject.getPropertyAsString("appId")));
                     accountBean.setErrorCode(soapObject.getPropertyAsString("errorCode"));
                     accountBean.setErrorDesc(soapObject.getPropertyAsString("errorDesc"));
@@ -175,7 +193,13 @@ public class ApplicationManager {
                     accountBean.setThumb(Byte.parseByte(soapObject.getPropertyAsString("thumb")));
                 }
             }
-        }catch (Exception e){
+        }catch (IOException e) {
+            accountBean.setErrorDesc(e.getMessage());
+            accountBean.setErrorCode("-1");
+
+            Log.e("IOException>>>>>>>",e.getMessage());
+            e.printStackTrace();
+        } catch (XmlPullParserException e) {
             e.printStackTrace();
         }
         return accountBean;

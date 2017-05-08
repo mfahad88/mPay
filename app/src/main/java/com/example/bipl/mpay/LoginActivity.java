@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +30,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public static final String MyPREFERENCES = "MyPrefs" ;
     public static final int CONTEXT=Context.MODE_PRIVATE;
     SharedPreferences sharedpreferences;
-
+    ImageView powerbtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,20 +54,38 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
+        powerbtn=(ImageView)findViewById(R.id.imageViewPower);
+        powerbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    finishAffinity();
+                    System.exit(0);
+                }
+
+            }
+        });
     }
 
+    @Override
+    public void onBackPressed() {
+
+    }
 
     @Override
     protected void onDestroy() {
- /*       SharedPreferences.Editor editor = sharedpreferences.edit();
+        SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.clear();
-        editor.commit();*/
+        editor.commit();
+        Toast.makeText(this, "onDestory", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onClick(View v) {
        if(v.getId()==R.id.buttonLogin){
-           new loginAsync().execute(edt_username.getText().toString(),edt_password.getText().toString());
+           if(edt_username.getText().toString().trim()!=null && edt_password.getText().toString().trim()!=null) {
+               new loginAsync().execute(edt_username.getText().toString(), edt_password.getText().toString());
+           }
        }
     }
 

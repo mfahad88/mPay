@@ -12,11 +12,18 @@
         android:layout_marginRight="15sp"
         android:layout_marginLeft="15sp"
         android:layout_width="match_parent"
-        android:layout_height="170sp"
+        android:layout_height="300sp"
         android:background="@android:color/white"
         android:id="@+id/layoutHeader">
         <ImageView
-            android:layout_marginTop="5sp"
+            android:layout_marginLeft="520dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/powerred"
+            android:id="@+id/imageViewPower"/>
+        <ImageView
+            android:layout_marginTop="50sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:src="@drawable/mpay_logo"/>
@@ -32,54 +39,53 @@
         android:layout_marginTop="13sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:id="@+id/tableLayout">
 
         <TableRow
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
             android:layout_marginLeft="18sp"
             android:layout_marginRight="18sp">
 
+            <RelativeLayout
 
-            <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal">
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal">
                 <TextView
                     android:text="Welcome"
                     android:textColor="@color/textColor"
-                    android:textSize="17dp"
+                    android:textSize="24dp"
+                    android:gravity="center_horizontal"
                     android:textStyle="bold"
-                    android:layout_width="wrap_content"
+                    android:layout_width="400sp"
                     android:layout_height="wrap_content"
                     android:id="@+id/textViewWelcome" />
-            </LinearLayout>
-        </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal">
             <TextView
+                android:text="User"
                 android:textColor="@color/textColor"
-                android:textSize="22dp"
-                android:textStyle="bold"
+                android:paddingLeft="15sp"
+                android:textSize="24dp"
                 android:gravity="center_horizontal"
-                android:layout_marginLeft="5sp"
+                android:textStyle="bold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/textViewName" />
-
+                android:id="@+id/textViewName"
+                />
+            </RelativeLayout>
         </TableRow>
+
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="30sp"
             android:layout_marginLeft="18sp"
             android:layout_marginRight="18sp">
 
             <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
+                android:layout_width="550sp"
                 android:layout_height="wrap_content"
                 android:textColorHint="@color/textColor">
 
@@ -87,6 +93,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Amount"
+                    android:textSize="24sp"
                     android:focusable="false"
                     android:textColor="@color/textColor"
                     android:textColorHint="@color/textColor"
@@ -108,7 +115,7 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_marginTop="5sp"
-                android:layout_width="match_parent"
+                android:layout_width="550sp"
                 android:layout_height="wrap_content"
                 android:textColorHint="@color/textColor">
 
@@ -118,6 +125,7 @@
                     android:hint="@string/cnic"
                     android:textColor="@color/textColor"
                     android:textColorHint="@color/textColor"
+                    android:textSize="24sp"
                     android:singleLine="true"
                     android:focusable="false"
                     android:ems="15"
@@ -136,7 +144,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tableLayout"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="30sp">
         <include layout="@layout/layout_pinpad"/>
     </RelativeLayout>
     </RelativeLayout>

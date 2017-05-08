@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -32,7 +34,8 @@ public class AccountActivity extends AppCompatActivity {
     RadioGroup radioGroup;
     RadioButton radioLoyality,radioAccount;
     SharedPreferences sharedPreferences,sharedPreferences2;
-
+    Button btn_cancel;
+    ImageView powerbtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +55,7 @@ public class AccountActivity extends AppCompatActivity {
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         radioLoyality=(RadioButton)findViewById(R.id.radioLoyalty);
         radioAccount=(RadioButton)findViewById(R.id.radioAccount);
-
+        btn_cancel=(Button)findViewById(R.id.buttonCancel) ;
         new accountAsync().execute();
         Typeface typeface=Typeface.createFromAsset(getAssets(),"font/palatino-linotype.ttf");
         tvTitle.setTypeface(typeface);
@@ -75,6 +78,30 @@ public class AccountActivity extends AppCompatActivity {
                 }
             }
         });
+        powerbtn=(ImageView)findViewById(R.id.imageViewPower);
+        powerbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    finishAffinity();
+                    System.exit(0);
+                }
+
+            }
+        });
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(AccountActivity.this,PaymentActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+
+    }
+
+    @Override
+    public void onBackPressed() {
 
     }
 

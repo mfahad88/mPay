@@ -26,6 +26,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +55,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     EditText edit_amount,edit_cnic;
     TextView tvName,tvWelcome;
     SharedPreferences sharedpreferences,sharedpreferences2;
+    Typeface typeface;
+    ImageView powerbtn;
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     DialogFragment dialogFragment;
     public static final String MyPREFERENCES = "paymentPrefs" ;
@@ -70,13 +73,23 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         tvWelcome=(TextView)findViewById(R.id.textViewWelcome);
         edit_amount=(EditText)findViewById(R.id.edittextAmount);
         edit_cnic=(EditText)findViewById(R.id.edittextCNIC);
-        Typeface typeface=Typeface.createFromAsset(getAssets(), "font/palatino-linotype.ttf");
+        typeface=Typeface.createFromAsset(getAssets(), "font/palatino-linotype.ttf");
         edit_amount.setTypeface(typeface);
         edit_cnic.setTypeface(typeface);
         tvWelcome.setTypeface(typeface);
         tvName.setTypeface(typeface);
         initViews();
+        powerbtn=(ImageView)findViewById(R.id.imageViewPower);
+        powerbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    finishAffinity();
+                    System.exit(0);
+                }
 
+            }
+        });
         try {
             JSONObject jsonObject=new JSONObject(sharedpreferences.getString("UserLoginBean",""));
             JSONObject jsonObject1=new JSONObject(jsonObject.getString("user"));
@@ -89,6 +102,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
+
+    }
+
+    @Override
+    public void onBackPressed() {
 
     }
 

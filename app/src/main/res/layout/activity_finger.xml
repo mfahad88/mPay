@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_finger"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="800dp"
+    android:layout_height="500dp"
     android:background="#0273BC"
     tools:context="com.example.bipl.mpay.FingerActivity">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="800dp"
+        android:layout_height="500dp"
         android:layout_below="@+id/layoutHeader"
         android:background="@drawable/background">
     <TableLayout
@@ -36,15 +36,15 @@
         </TableRow>
 
         <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:layout_marginLeft="18sp"
             android:layout_marginRight="18sp">
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="200sp"
+                android:layout_height="wrap_content"
                 app:srcCompat="@drawable/thumb"
                 android:layout_below="@+id/tableLayout"
                 android:layout_centerHorizontal="true"

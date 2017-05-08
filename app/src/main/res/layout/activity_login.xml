@@ -11,11 +11,18 @@
         android:layout_marginRight="15sp"
         android:layout_marginLeft="15sp"
         android:layout_width="match_parent"
-        android:layout_height="170sp"
+        android:layout_height="300sp"
         android:background="@android:color/white"
         android:id="@+id/layoutHeader">
         <ImageView
-            android:layout_marginTop="5sp"
+            android:layout_marginLeft="520dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/powerred"
+            android:id="@+id/imageViewPower"/>
+        <ImageView
+            android:layout_marginTop="50sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:src="@drawable/mpay_logo"/>
@@ -48,14 +55,14 @@
         </TableRow>
 
         <TableRow
-            android:layout_marginTop="25sp"
+            android:layout_marginTop="60sp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="18sp"
             android:layout_marginRight="18sp">
 
             <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
+                android:layout_width="550sp"
                 android:layout_height="wrap_content"
                 android:textColorHint="@color/textColor">
 
@@ -67,7 +74,6 @@
                     android:textColorHint="@color/textColor"
                     android:singleLine="true"
                     android:inputType="textCapCharacters"
-                    android:ems="15"
                     android:layout_marginLeft="5sp"
                     android:layout_marginRight="5sp"
                     android:id="@+id/edittextUsername"
@@ -78,12 +84,12 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="10sp"
+            android:layout_marginTop="60sp"
             android:layout_marginLeft="18sp"
             android:layout_marginRight="18sp">
 
             <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
+                android:layout_width="550sp"
                 android:layout_height="wrap_content"
                 android:textColorHint="@color/textColor">
 
@@ -94,7 +100,6 @@
                     android:textColor="@color/textColor"
                     android:textColorHint="@color/textColor"
                     android:singleLine="true"
-                    android:ems="15"
                     android:inputType="textPassword"
                     android:layout_marginLeft="5sp"
                     android:layout_marginRight="5sp"
@@ -107,7 +112,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:layout_marginTop="20sp">
+            android:layout_marginTop="60sp">
 
             <Button
                 android:text="@string/login"

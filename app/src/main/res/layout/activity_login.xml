@@ -66,6 +66,7 @@
                     android:textColor="@color/textColor"
                     android:textColorHint="@color/textColor"
                     android:singleLine="true"
+                    android:inputType="textCapCharacters"
                     android:ems="15"
                     android:layout_marginLeft="5sp"
                     android:layout_marginRight="5sp"

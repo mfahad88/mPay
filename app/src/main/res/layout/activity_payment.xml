@@ -34,22 +34,44 @@
         android:layout_height="wrap_content"
         android:id="@+id/tableLayout">
 
-  <!--      <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal">
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="18sp"
+            android:layout_marginRight="18sp">
 
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal">
+                <TextView
+                    android:text="Welcome"
+                    android:textColor="@color/textColor"
+                    android:textSize="17dp"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textViewWelcome" />
+            </LinearLayout>
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal">
             <TextView
-                android:text="@string/enter_amount_and_cnic_number"
+                android:textColor="@color/textColor"
+                android:textSize="22dp"
+                android:textStyle="bold"
+                android:gravity="center_horizontal"
+                android:layout_marginLeft="5sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/textColor"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:gravity="center_horizontal|center_vertical"
-                android:id="@+id/textViewTitle" />
-        </TableRow>-->
+                android:id="@+id/textViewName" />
 
+        </TableRow>
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"

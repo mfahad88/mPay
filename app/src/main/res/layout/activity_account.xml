@@ -29,6 +29,8 @@
         android:layout_marginTop="20sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="18sp"
+        android:layout_marginRight="18sp"
         android:id="@+id/tableLayout">
 
         <TableRow
@@ -41,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/textColor"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 android:gravity="center_horizontal|center_vertical"
                 android:id="@+id/textViewTitle" />
@@ -50,45 +52,129 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:layout_marginTop="30sp"
+            android:gravity="left"
+            android:layout_marginTop="10sp"
             android:layout_marginLeft="18sp"
             android:layout_marginRight="18sp">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Account Name"
+                android:textColor="#000"
+                android:id="@+id/textViewaccName" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="left"
+            android:layout_marginLeft="18sp"
+            android:layout_marginRight="18sp">
 
             <EditText
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:text="Name"
+                android:text="Account Name"
                 android:singleLine="true"
                 android:focusable="false"
-                android:ems="10"
-                android:gravity="center_horizontal"
                 android:textColor="@color/textColor"
-                android:id="@+id/editTextName" />
+                android:id="@+id/editTextaccName" />
+
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:layout_marginTop="30sp"
+            android:gravity="left"
+            android:layout_marginTop="5sp"
+            android:layout_marginLeft="18sp"
+            android:layout_marginRight="18sp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Account Number"
+                android:textColor="#000"
+                android:id="@+id/textViewaccNum" />
+
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="left"
             android:layout_marginLeft="18sp"
             android:layout_marginRight="18sp">
 
 
             <EditText
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:text="CNIC"
+                android:text="Account Number"
                 android:singleLine="true"
                 android:focusable="false"
-                android:ems="10"
-                android:gravity="center_horizontal"
                 android:textColor="@color/textColor"
-                android:id="@+id/editTextCn" />
+                android:id="@+id/editTextaccNum" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="left"
+            android:layout_marginLeft="18sp"
+            android:layout_marginRight="18sp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Points"
+                android:layout_weight="1"
+                android:textColor="#000"
+                android:id="@+id/textViewaccPoints" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Point Worth"
+                android:layout_weight="1"
+                android:textColor="#000"
+                android:id="@+id/textViewaccpointWorth" />
+
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="left"
+            android:layout_marginLeft="18sp"
+            android:layout_marginRight="18sp">
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="number"
+                android:text="Points"
+                android:singleLine="true"
+                android:focusable="false"
+                android:layout_gravity="left"
+                android:textColor="@color/textColor"
+                android:id="@+id/editTextpoints" />
+
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:inputType="number"
+                    android:text="Points Worth"
+                    android:singleLine="true"
+                    android:gravity="left"
+                    android:focusable="false"
+                    android:textColor="@color/textColor"
+                    android:id="@+id/editTextpointsWorth" />
         </TableRow>
 
         <TableRow
@@ -99,16 +185,35 @@
             android:layout_marginLeft="18sp"
             android:layout_marginRight="18sp">
 
-            <Button
-                android:text="@string/verify"
-                android:layout_width="wrap_content"
+            <RadioGroup
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="@color/textColor"
-                android:background="@drawable/button_border"
-                android:id="@+id/buttonVerify" />
+                android:orientation="horizontal"
+                android:id="@+id/radioGroup">
+
+
+                <RadioButton
+                    android:textColor="@color/textColor"
+                    android:text="@string/loyality"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/radioLoyalty"
+                    android:background="@drawable/button_border" />
+
+                <RadioButton
+                    android:textColor="@color/textColor"
+                    android:layout_marginLeft="20sp"
+                    android:text="@string/account"
+                    android:background="@drawable/button_border"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/radioAccount" />
+
+            </RadioGroup>
+
         </TableRow>
 
     </TableLayout>
+
     </RelativeLayout>
 </RelativeLayout>

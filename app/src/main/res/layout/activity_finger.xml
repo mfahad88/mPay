@@ -7,20 +7,7 @@
     android:layout_height="match_parent"
     android:background="#0273BC"
     tools:context="com.example.bipl.mpay.FingerActivity">
-    <RelativeLayout
-        android:layout_marginTop="15sp"
-        android:layout_marginRight="15sp"
-        android:layout_marginLeft="15sp"
-        android:layout_width="match_parent"
-        android:layout_height="170sp"
-        android:background="@android:color/white"
-        android:id="@+id/layoutHeader">
-        <ImageView
-            android:layout_marginTop="5sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/mpay_logo"/>
-    </RelativeLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -57,7 +44,7 @@
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="200sp"
                 app:srcCompat="@drawable/thumb"
                 android:layout_below="@+id/tableLayout"
                 android:layout_centerHorizontal="true"

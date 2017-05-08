@@ -10,6 +10,7 @@ import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,6 +32,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         setContentView(R.layout.activity_login);
         tv_title=(TextView)findViewById(R.id.textViewTitle);
@@ -69,7 +71,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     public class loginAsync extends AsyncTask<String,String,Boolean>{
         ProgressDialog progressDialog;
-
+        String errorMessage;
+        String name;
         @Override
         protected Boolean doInBackground(String... params) {
             String userName=params[0];
@@ -80,13 +83,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             SharedPreferences.Editor editor = sharedpreferences.edit();
             Gson gson = new Gson();
             UserLoginBean loginBean=ApplicationManager.Login(userName,password,appId);
-            if(Integer.parseInt(loginBean.getErrorCode())==0 && loginBean.getStatus()==1) {
+            if(loginBean.getErrorCode().equals("0") && loginBean.getStatus()==1) {
                 String json = gson.toJson(loginBean);
                 editor.putString("UserLoginBean", json);
                 if (!json.equals(null)) {
                     status = true;
+                    name=loginBean.getUser().getUserName();
                 }
                 editor.commit();
+            }else{
+                errorMessage=loginBean.getErrorDesc();
+                status=false;
             }
             return status;
         }
@@ -103,14 +110,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
-            Toast.makeText(LoginActivity.this, aBoolean.toString(), Toast.LENGTH_SHORT).show();
+
             if(aBoolean==true){
                 progressDialog.dismiss();
                 Intent i=new Intent(LoginActivity.this,PaymentActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
             }else{
-                progressDialog.cancel();
+                progressDialog.dismiss();
+                Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
             }
         }
 

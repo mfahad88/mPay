@@ -1,22 +1,22 @@
 package com.example.bipl.data;
 
 /**
- * Created by fahad on 5/2/2017.
+ * Created by fahad on 5/4/2017.
  */
 
-public class TrxBean {
-    private String amount;
+public class PaymentBean {
     private int appId;
     private String cnic;
-    private String description;
     private String flag;
-    private int processCode;
-    private int productId;
     private String thumb;
     private String token;
     private String mId;
     private String oId;
     private String uId;
+    private String description;
+    private int processCode;
+    private int productId;
+    private String amount;
 
     public String getAmount() {
         return amount;
@@ -42,36 +42,12 @@ public class TrxBean {
         this.cnic = cnic;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getFlag() {
         return flag;
     }
 
     public void setFlag(String flag) {
         this.flag = flag;
-    }
-
-    public int getProcessCode() {
-        return processCode;
-    }
-
-    public void setProcessCode(int processCode) {
-        this.processCode = processCode;
-    }
-
-    public int getProductId() {
-        return productId;
-    }
-
-    public void setProductId(int productId) {
-        this.productId = productId;
     }
 
     public String getThumb() {
@@ -114,21 +90,45 @@ public class TrxBean {
         this.uId = uId;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getProcessCode() {
+        return processCode;
+    }
+
+    public void setProcessCode(int processCode) {
+        this.processCode = processCode;
+    }
+
+    public int getProductId() {
+        return productId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
+
     @Override
     public String toString() {
-        return "TrxBean{" +
-                "amount='" + amount + '\'' +
-                ", appId=" + appId +
+        return "PaymentBean{" +
+                "appId=" + appId +
                 ", cnic='" + cnic + '\'' +
-                ", description='" + description + '\'' +
                 ", flag='" + flag + '\'' +
-                ", processCode=" + processCode +
-                ", productId=" + productId +
                 ", thumb='" + thumb + '\'' +
                 ", token='" + token + '\'' +
                 ", mId='" + mId + '\'' +
                 ", oId='" + oId + '\'' +
                 ", uId='" + uId + '\'' +
+                ", description='" + description + '\'' +
+                ", processCode=" + processCode +
+                ", productId=" + productId +
+                ", amount='" + amount + '\'' +
                 '}';
     }
 }

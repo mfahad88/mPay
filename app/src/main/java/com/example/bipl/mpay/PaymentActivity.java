@@ -1,16 +1,23 @@
 package com.example.bipl.mpay;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.icu.text.NumberFormat;
+import android.icu.util.Currency;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Handler;
+import android.os.StrictMode;
 import android.support.annotation.IdRes;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -23,34 +30,65 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bipl.app.ApplicationManager;
+import com.example.bipl.data.AccountBean;
 import com.example.bipl.data.TrxBean;
+import com.example.bipl.util.EditDialogListener;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
-public class PaymentActivity extends AppCompatActivity implements View.OnClickListener {
+public class PaymentActivity extends AppCompatActivity implements View.OnClickListener,EditDialogListener {
     int focusCheck=0;
     EditText edit_amount,edit_cnic;
-
+    TextView tvName,tvWelcome;
+    SharedPreferences sharedpreferences,sharedpreferences2;
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    DialogFragment dialogFragment;
+    public static final String MyPREFERENCES = "paymentPrefs" ;
+    public static final int CONTEXT=Context.MODE_PRIVATE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
+
+        sharedpreferences = getSharedPreferences(LoginActivity.MyPREFERENCES, LoginActivity.CONTEXT);
+        sharedpreferences2 = getSharedPreferences(MyPREFERENCES, CONTEXT);
+        tvName=(TextView)findViewById(R.id.textViewName);
+        tvWelcome=(TextView)findViewById(R.id.textViewWelcome);
         edit_amount=(EditText)findViewById(R.id.edittextAmount);
         edit_cnic=(EditText)findViewById(R.id.edittextCNIC);
         Typeface typeface=Typeface.createFromAsset(getAssets(), "font/palatino-linotype.ttf");
         edit_amount.setTypeface(typeface);
         edit_cnic.setTypeface(typeface);
+        tvWelcome.setTypeface(typeface);
+        tvName.setTypeface(typeface);
         initViews();
 
+        try {
+            JSONObject jsonObject=new JSONObject(sharedpreferences.getString("UserLoginBean",""));
+            JSONObject jsonObject1=new JSONObject(jsonObject.getString("user"));
+            tvName.setText(jsonObject1.getString("userName"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-
+        if (Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
 
     }
 
@@ -84,7 +122,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         if (v.getTag() != null && "number_button".equals(v.getTag())) {
             if(focusCheck==0) {
-                edit_amount.append(((TextView) v).getText());
+                edit_amount.append(((TextView) v).getText().toString());
             }if(focusCheck==1){
                 if(edit_cnic.length()==5 || edit_cnic.length()==13) {
 
@@ -135,17 +173,15 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             edit_cnic.setBackgroundDrawable(getResources().getDrawable(R.drawable.border_gray));
         }
         if(focusCheck==1){
+
             edit_amount.setBackgroundDrawable(getResources().getDrawable(R.drawable.border_gray));
             edit_cnic.setBackgroundDrawable(getResources().getDrawable(R.drawable.border));
         }
         if(focusCheck==2) {
             if (!TextUtils.isEmpty(edit_amount.getText().toString()) && edit_cnic.getText().length()==15) {
+                dialogFragment=new FingerActivity();
+                dialogFragment.show(getSupportFragmentManager(),"Finger");
 
-
-                new Trxasync().execute();
-          /*  Intent intent=new Intent(PaymentActivity.this,FingerActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);*/
             } else {
                 focusCheck=0;
                 edit_amount.setBackgroundDrawable(getResources().getDrawable(R.drawable.border));
@@ -155,36 +191,66 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    public class Trxasync extends AsyncTask<Void,Void,Boolean> {
+    @Override
+    public void updateResult(String inputText) {
+        Log.e("Finger>>>>>>>>>>>>",inputText);
+        dialogFragment.dismiss();
+        new Trxasync().execute();
+    }
+
+
+    public class Trxasync extends AsyncTask<Void,Void,Boolean>  {
         ProgressDialog progressDialog;
-        TrxBean trxBean=new TrxBean();
-
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            ApplicationManager.Account_TRX(trxBean);
-            return true;
-        }
-
+        String amount;
+        String cnic;
+        Boolean status=false;
+        TrxBean trxBean;
+        AccountBean accountBean;
+        String errorDesc;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            SharedPreferences sharedpreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-            trxBean.setAmount(Double.parseDouble(edit_amount.getText().toString()));
-            trxBean.setAppId(1);
-            trxBean.setCnic(edit_cnic.getText().toString().replaceAll("-",""));
-            trxBean.setDescription("testing");
-            trxBean.setErrorCode(sharedpreferences.getInt("errorCode",1));
-            trxBean.setProcessCode(0);
-            trxBean.setProductId(1);
-            trxBean.setToken(sharedpreferences.getString("token",""));
-            trxBean.setmId(sharedpreferences.getString("mId",""));
-            trxBean.setoId(sharedpreferences.getString("oId",""));
-            trxBean.setuId(sharedpreferences.getString("uId",""));
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            SharedPreferences.Editor editor1=sharedpreferences2.edit();
+            amount= edit_amount.getText().toString();
+            cnic=edit_cnic.getText().toString().replaceAll("-","");
+            editor1.putString("Cnic",cnic);
+            editor1.putString("Amount",amount);
+            editor1.commit();
             progressDialog=new ProgressDialog(PaymentActivity.this);
             progressDialog.setTitle("Loading...");
             progressDialog.setMessage("Validating CNIC...");
             progressDialog.show();
+
+        }
+
+        @SuppressLint("LongLogTag")
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            trxBean=new TrxBean();
+            try{
+                JSONObject jsonObject=new JSONObject(sharedpreferences.getAll());
+                JSONObject object=new JSONObject(jsonObject.getString("UserLoginBean"));
+                JSONObject userObject=new JSONObject(object.getString("user"));
+                trxBean.setAppId(1);
+                trxBean.setCnic(cnic);
+                trxBean.setFlag("DF");
+                trxBean.setToken(object.getString("token"));
+                trxBean.setmId(userObject.getString("mId"));
+                trxBean.setoId(userObject.getString("oId"));
+                trxBean.setuId(userObject.getString("uId"));
+
+            accountBean=ApplicationManager.Account_TRX(trxBean);
+            if(Integer.parseInt(accountBean.getErrorCode())==0){
+                status=true;
+            }else{
+                status=false;
+                errorDesc=accountBean.getErrorDesc();
+            }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return status;
         }
 
         @Override
@@ -193,12 +259,47 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             if(aBoolean){
                 progressDialog.dismiss();
                 Intent i=new Intent(PaymentActivity.this,AccountActivity.class);
+                i.putExtra("accountBean",new Gson().toJson(accountBean));
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
             }else{
                 progressDialog.dismiss();
+                AlertDialog.Builder alertDialog=new AlertDialog.Builder(PaymentActivity.this);
+                alertDialog.setCancelable(false);
+                alertDialog.setMessage(errorDesc);
+                alertDialog.setTitle("Warning...");
+
+                alertDialog.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        edit_amount.setText(null);
+                        edit_cnic.setText(null);
+                        focusCheck=0;
+                        initViews();
+                    }
+                });
+                final AlertDialog dialog=alertDialog.create();
+                dialog.getWindow().setBackgroundDrawableResource(R.drawable.button_border);
+                dialog.show();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        dialog.dismiss();
+                        edit_amount.setText(null);
+                        edit_cnic.setText(null);
+                        focusCheck=0;
+                        initViews();
+                    }
+                }, 5000);
+
             }
         }
+
+
     }
+
 
 }

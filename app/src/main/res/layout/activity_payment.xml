@@ -54,19 +54,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal">
+
                 <TextView
-                    android:text="Welcome"
-                    android:textColor="@color/textColor"
-                    android:textSize="24dp"
-                    android:gravity="center_horizontal"
-                    android:textStyle="bold"
-                    android:layout_width="400sp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textViewWelcome" />
-            <TextView
-                android:text="User"
+                android:text="Welcome"
                 android:textColor="@color/textColor"
-                android:paddingLeft="15sp"
                 android:textSize="24dp"
                 android:gravity="center_horizontal"
                 android:textStyle="bold"

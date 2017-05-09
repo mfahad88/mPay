@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.icu.text.NumberFormat;
 import android.icu.util.Currency;
@@ -62,6 +63,12 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     public static final String MyPREFERENCES = "paymentPrefs" ;
     public static final int CONTEXT=Context.MODE_PRIVATE;
 
+    protected void clearSession() {
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.clear();
+        editor.commit();
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,30 +77,59 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         sharedpreferences = getSharedPreferences(LoginActivity.MyPREFERENCES, LoginActivity.CONTEXT);
         sharedpreferences2 = getSharedPreferences(MyPREFERENCES, CONTEXT);
         tvName=(TextView)findViewById(R.id.textViewName);
-        tvWelcome=(TextView)findViewById(R.id.textViewWelcome);
+
         edit_amount=(EditText)findViewById(R.id.edittextAmount);
         edit_cnic=(EditText)findViewById(R.id.edittextCNIC);
         typeface=Typeface.createFromAsset(getAssets(), "font/palatino-linotype.ttf");
         edit_amount.setTypeface(typeface);
         edit_cnic.setTypeface(typeface);
-        tvWelcome.setTypeface(typeface);
+
         tvName.setTypeface(typeface);
         initViews();
         powerbtn=(ImageView)findViewById(R.id.imageViewPower);
         powerbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    finishAffinity();
-                    System.exit(0);
-                }
+                AlertDialog.Builder builder=new AlertDialog.Builder(PaymentActivity.this);
+                builder.setTitle("Confirmation...");
+                builder.setCancelable(false);
+                builder.setMessage("Are you sure want to exit?");
+
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                            clearSession();
+                            PaymentActivity.this.finishAffinity();
+                            System.exit(0);
+                        }
+
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                final AlertDialog alertDialog=builder.create();
+                alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        alertDialog.getButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#000000"));
+                        alertDialog.getButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#000000"));
+                    }
+                });
+                alertDialog.show();
 
             }
         });
         try {
             JSONObject jsonObject=new JSONObject(sharedpreferences.getString("UserLoginBean",""));
             JSONObject jsonObject1=new JSONObject(jsonObject.getString("user"));
-            tvName.setText(jsonObject1.getString("userName"));
+            tvName.setText("Welcome "+jsonObject1.getString("userName"));
         } catch (JSONException e) {
             e.printStackTrace();
         }

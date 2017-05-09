@@ -90,27 +90,24 @@
 
             <TextView
                 android:id="@+id/t9_key_backspace"
-                style="@style/keyboard_button_back"
+                style="@style/keyboard_number_button"
                 android:text="◄"
                 android:textSize="30dp"
-                android:elevation="5dp"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                android:elevation="5dp" />
         </TableRow>
         <TableRow style="@style/keyboard_row">
 
             <TextView
                 android:id="@+id/t9_key_reset"
-                style="@style/keyboard_button"
+                style="@style/keyboard_number_button"
                 android:elevation="5dp"
-                android:text="@string/btn_reset"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                android:text="@string/btn_reset" />
 
             <TextView
                 android:id="@+id/t9_key_done"
-                style="@style/keyboard_button"
+                style="@style/keyboard_number_button"
                 android:elevation="5dp"
-                android:text="@string/btn_done"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                android:text="@string/btn_done" />
         </TableRow>
     </TableLayout>
 </LinearLayout>

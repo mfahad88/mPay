@@ -1,8 +1,12 @@
 package com.example.bipl.mpay;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -36,6 +40,18 @@ public class AccountActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences,sharedPreferences2;
     Button btn_cancel;
     ImageView powerbtn;
+    private String refNo;
+
+    protected void clearSession() {
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        SharedPreferences.Editor editor2 = sharedPreferences2.edit();
+        editor.clear();
+        editor.commit();
+        editor2.clear();
+        editor2.commit();
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,16 +92,47 @@ public class AccountActivity extends AppCompatActivity {
                 if(radioButton.getText().toString().trim().equals("Account")){
                     new paymentAccount().execute();
                 }
+                if(radioButton.getText().toString().trim().equals("Loyality")){
+                    new paymentLoyality().execute();
+                }
             }
         });
         powerbtn=(ImageView)findViewById(R.id.imageViewPower);
         powerbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    finishAffinity();
-                    System.exit(0);
-                }
+                AlertDialog.Builder builder=new AlertDialog.Builder(AccountActivity.this);
+                builder.setTitle("Confirmation...");
+                builder.setCancelable(false);
+                builder.setMessage("Are you sure want to exit?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                            clearSession();
+                            AccountActivity.this.finishAffinity();
+                            System.exit(0);
+                        }
+
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                final AlertDialog alertDialog=builder.create();
+                alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        alertDialog.getButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#000000"));
+                        alertDialog.getButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#000000"));
+                    }
+                });
+                alertDialog.show();
 
             }
         });
@@ -107,6 +154,15 @@ public class AccountActivity extends AppCompatActivity {
 
     public class paymentAccount extends AsyncTask<Void,Void,Boolean>{
         String errorDesc;
+        ProgressDialog progressDialog;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog=new ProgressDialog(AccountActivity.this);
+            progressDialog.setMessage("Please Wait...");
+            progressDialog.setTitle("Loading...");
+            progressDialog.show();
+        }
 
         @Override
         protected Boolean doInBackground(Void... params) {
@@ -140,6 +196,72 @@ public class AccountActivity extends AppCompatActivity {
                 Log.e("PaymentBean",trxBean.toString());
                 accountBean=ApplicationManager.Account_TRX(trxBean);
                 if(Integer.parseInt(accountBean.getErrorCode())==0 && Integer.parseInt(accountBean.getProcessCode())==1){
+                    refNo= String.valueOf(accountBean.getTrxNoImal());
+                    status=true;
+                }else{
+                    status=false;
+                    errorDesc=accountBean.getErrorDesc();
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return status;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            if(aBoolean){
+               Intent intent=new Intent(AccountActivity.this,TransactionActivity.class);
+                intent.putExtra("refNo",refNo);
+                intent.putExtra("Amount",new Double(sharedPreferences2.getString("Amount","0")));
+                progressDialog.dismiss();
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }else{
+                progressDialog.dismiss();
+                Toast.makeText(AccountActivity.this, errorDesc, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    public class paymentLoyality extends AsyncTask<Void,Void,Boolean>{
+        String errorDesc;
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            TrxBean trxBean=new TrxBean();
+            AccountBean accountBean;
+            Boolean status=false;
+            try {
+
+                JSONObject jsonObject=new JSONObject(sharedPreferences.getAll());
+                JSONObject object=new JSONObject(jsonObject.getString("UserLoginBean"));
+                JSONObject userObject=new JSONObject(object.getString("user"));
+                Log.e("Token",object.getString("token"));
+                Log.e("mId",userObject.getString("mId"));
+                Log.e("oId",userObject.getString("oId"));
+                Log.e("uId",userObject.getString("uId"));
+                Log.e("CNIC",sharedPreferences2.getString("Cnic",""));
+                Log.e("Amount",sharedPreferences2.getString("Amount","0"));
+
+
+                trxBean.setFlag("LOY_TRX");
+                trxBean.setCnic(sharedPreferences2.getString("Cnic",""));
+                trxBean.setAmount(sharedPreferences2.getString("Amount","0"));
+                trxBean.setToken(object.getString("token"));
+                trxBean.setmId(userObject.getString("mId"));
+                trxBean.setoId(userObject.getString("oId"));
+                trxBean.setuId(userObject.getString("uId"));
+                trxBean.setAppId(1);
+                trxBean.setDescription("testing");
+                trxBean.setProcessCode(0);
+                trxBean.setProductId(1);
+                Log.e("PaymentBean",trxBean.toString());
+                accountBean=ApplicationManager.Account_TRX(trxBean);
+                if(Integer.parseInt(accountBean.getErrorCode())==0 && Integer.parseInt(accountBean.getProcessCode())==1){
+                    refNo= String.valueOf(accountBean.getTrxNoPoints());
                     status=true;
                 }else{
                     status=false;
@@ -157,6 +279,8 @@ public class AccountActivity extends AppCompatActivity {
             super.onPostExecute(aBoolean);
             if(aBoolean){
                 Intent intent=new Intent(AccountActivity.this,TransactionActivity.class);
+                intent.putExtra("refNo",refNo);
+                intent.putExtra("Amount",new Double(sharedPreferences2.getString("Amount","0")));
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }else{
@@ -164,7 +288,6 @@ public class AccountActivity extends AppCompatActivity {
             }
         }
     }
-
     public class accountAsync extends AsyncTask<Void,Void,JSONObject>{
 
         @Override

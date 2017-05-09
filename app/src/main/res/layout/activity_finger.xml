@@ -5,9 +5,12 @@
     android:id="@+id/activity_finger"
     android:layout_width="800dp"
     android:layout_height="500dp"
-    android:background="#0273BC"
+    android:background="@drawable/border_frag"
     tools:context="com.example.bipl.mpay.FingerActivity">
-
+    <RelativeLayout
+        android:layout_width="800dp"
+        android:layout_height="500dp"
+        android:background="#0273BC">
     <RelativeLayout
         android:layout_width="800dp"
         android:layout_height="500dp"
@@ -56,6 +59,6 @@
 
     </TableLayout>
 </RelativeLayout>
-
+    </RelativeLayout>
 
 </RelativeLayout>

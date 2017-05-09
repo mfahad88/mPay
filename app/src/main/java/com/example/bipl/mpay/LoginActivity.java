@@ -2,12 +2,15 @@ package com.example.bipl.mpay;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.StrictMode;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -58,11 +61,42 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         powerbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    finishAffinity();
-                    System.exit(0);
-                }
 
+                    AlertDialog.Builder builder=new AlertDialog.Builder(LoginActivity.this);
+
+                    builder.setTitle("Confirmation...");
+                    builder.setCancelable(false);
+                    builder.setMessage("Are you sure want to exit?");
+                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                                dialog.dismiss();
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                                clearSession();
+                                LoginActivity.this.finishAffinity();
+                                System.exit(0);
+                            }
+
+                        }
+                    });
+                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                final AlertDialog alertDialog=builder.create();
+                alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#000000"));
+                        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#000000"));
+                    }
+                });
+
+                alertDialog.show();
             }
         });
     }
@@ -72,12 +106,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    @Override
-    protected void onDestroy() {
+
+    protected void clearSession() {
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.clear();
         editor.commit();
-        Toast.makeText(this, "onDestory", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
@@ -138,7 +172,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(i);
             }else{
                 progressDialog.dismiss();
-                Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_LONG).show();
             }
         }
 

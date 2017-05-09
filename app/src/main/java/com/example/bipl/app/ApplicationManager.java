@@ -1,6 +1,7 @@
 package com.example.bipl.app;
 
 import android.annotation.SuppressLint;
+import android.content.res.Resources;
 import android.util.Log;
 
 
@@ -9,6 +10,7 @@ import com.example.bipl.data.PaymentBean;
 import com.example.bipl.data.TrxBean;
 import com.example.bipl.data.UserBean;
 import com.example.bipl.data.UserLoginBean;
+import com.example.bipl.mpay.R;
 
 
 import org.ksoap2.HeaderProperty;
@@ -28,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
 /**
  * Created by fahad on 4/28/2017.
  */
@@ -35,13 +38,14 @@ import java.util.List;
 public class ApplicationManager {
     private final static String NAMESPACE = "http://ws.bi.com/";
     private final static String URL = "http://192.168.161.1:59084/BIPOS_WS/BiPosWSService";
-
+    /*private final static String URL = "http://10.7.255.77:59084/BIPOS_WS/BiPosWSService";*/
+    private final static String SOAP_ACTION = "http://ws.bi.com/";
 
     @SuppressLint("LongLogTag")
     public static UserLoginBean Login(String username, String password, Integer appId){
 
         String METHOD_NAME = "LOGIN";
-        String SOAP_ACTION = "http://ws.bi.com/";
+
         UserLoginBean userLoginBean=new UserLoginBean();
         UserBean userBean=new UserBean();
         try {
@@ -116,7 +120,7 @@ public class ApplicationManager {
 
     public static AccountBean Account_TRX(TrxBean trxBean){
         String METHOD_NAME = "TRX";
-        String SOAP_ACTION = "http://ws.bi.com/";
+
         AccountBean accountBean = null;
 
         try {
@@ -141,7 +145,7 @@ public class ApplicationManager {
 
             SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
             envelope.setOutputSoapObject(request);
-            HttpTransportSE httpTransportSE = new HttpTransportSE(URL);
+            HttpTransportSE httpTransportSE = new HttpTransportSE(URL,100000);
             httpTransportSE.debug = true;
             List<HeaderProperty> list = new ArrayList<>();
             list.add(new HeaderProperty("uname", "adnan"));
@@ -268,7 +272,7 @@ public class ApplicationManager {
 
             SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
             envelope.setOutputSoapObject(request);
-            HttpTransportSE httpTransportSE=new HttpTransportSE(URL);
+            HttpTransportSE httpTransportSE=new HttpTransportSE(URL,20000);
             httpTransportSE.debug=true;
             List<HeaderProperty> list=new ArrayList<>();
             list.add(new HeaderProperty("uname","adnan"));

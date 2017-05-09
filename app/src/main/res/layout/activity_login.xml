@@ -71,7 +71,6 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/username"
                     android:textColor="@color/textColor"
-                    android:textColorHint="@color/textColor"
                     android:singleLine="true"
                     android:inputType="textCapCharacters"
                     android:layout_marginLeft="5sp"

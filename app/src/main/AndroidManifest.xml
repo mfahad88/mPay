@@ -37,7 +37,7 @@
 
         <activity android:name=".LoginActivity" />
         <activity android:name=".PaymentActivity" />
-        <activity android:name=".FingerActivity" />
+
         <activity android:name=".AccountActivity" />
         <activity android:name=".TransactionActivity"></activity>
     </application>

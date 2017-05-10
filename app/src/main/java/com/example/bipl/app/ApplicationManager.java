@@ -37,8 +37,8 @@ import java.util.List;
 
 public class ApplicationManager {
     private final static String NAMESPACE = "http://ws.bi.com/";
-    private final static String URL = "http://192.168.161.1:59084/BIPOS_WS/BiPosWSService";
-    /*private final static String URL = "http://10.7.255.77:59084/BIPOS_WS/BiPosWSService";*/
+    //private final static String URL = "http://192.168.161.1:59084/BIPOS_WS/BiPosWSService";
+    private final static String URL = "http://10.7.255.77:59084/BIPOS_WS/BiPosWSService";
     private final static String SOAP_ACTION = "http://ws.bi.com/";
 
     @SuppressLint("LongLogTag")
@@ -145,7 +145,7 @@ public class ApplicationManager {
 
             SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
             envelope.setOutputSoapObject(request);
-            HttpTransportSE httpTransportSE = new HttpTransportSE(URL,100000);
+            HttpTransportSE httpTransportSE = new HttpTransportSE(URL);
             httpTransportSE.debug = true;
             List<HeaderProperty> list = new ArrayList<>();
             list.add(new HeaderProperty("uname", "adnan"));
@@ -153,6 +153,7 @@ public class ApplicationManager {
 
             httpTransportSE.call(SOAP_ACTION, envelope, list);
             SoapObject soapObject = (SoapObject) envelope.getResponse();
+            Log.e("Request>>>>>>>>>",httpTransportSE.requestDump);
             Log.e("Response>>>>>>>>>>", soapObject.toString());
             if (trxBean.getFlag().equalsIgnoreCase("DF")) {
                 accountBean = new AccountBean();
@@ -185,6 +186,31 @@ public class ApplicationManager {
                     accountBean.setProductId(Long.valueOf(soapObject.getPropertyAsString("productId")));
                     accountBean.setThumb(Byte.parseByte(soapObject.getPropertyAsString("thumb")));
                     accountBean.setTrxNoImal(Long.valueOf(soapObject.getPropertyAsString("trxNoImal")));
+                    accountBean.setmId(soapObject.getPropertyAsString("mId"));
+                    accountBean.setoId(soapObject.getPropertyAsString("oId"));
+                    accountBean.setuId(soapObject.getPropertyAsString("uId"));
+
+                } else {
+                    accountBean.setAppId(Integer.parseInt(soapObject.getPropertyAsString("appId")));
+                    accountBean.setErrorCode(soapObject.getPropertyAsString("errorCode"));
+                    accountBean.setErrorDesc(soapObject.getPropertyAsString("errorDesc"));
+                    accountBean.setProcessCode(soapObject.getPropertyAsString("processCode"));
+                    accountBean.setThumb(Byte.parseByte(soapObject.getPropertyAsString("thumb")));
+                }
+            }
+            if (trxBean.getFlag().equalsIgnoreCase("LOY_TRX")) {
+                accountBean = new AccountBean();
+                if (Integer.parseInt(soapObject.getPropertyAsString("errorCode")) == 0) {
+                    accountBean.setAmount(soapObject.getPropertyAsString("amount"));
+                    accountBean.setAppId(Integer.parseInt(soapObject.getPropertyAsString("appId")));
+                    accountBean.setCnic(soapObject.getPropertyAsString("cnic"));
+                    //accountBean.setDescription(soapObject.getPropertyAsString("description"));
+                    accountBean.setErrorCode(soapObject.getPropertyAsString("errorCode"));
+                    //accountBean.setErrorDesc(soapObject.getPropertyAsString("errorDesc"));
+                    accountBean.setProcessCode(soapObject.getPropertyAsString("processCode"));
+                    accountBean.setProductId(Long.valueOf(soapObject.getPropertyAsString("productId")));
+                    accountBean.setThumb(Byte.parseByte(soapObject.getPropertyAsString("thumb")));
+                    accountBean.setTrxNoImal(Long.valueOf(soapObject.getPropertyAsString("trxNoPoints")));
                     accountBean.setmId(soapObject.getPropertyAsString("mId"));
                     accountBean.setoId(soapObject.getPropertyAsString("oId"));
                     accountBean.setuId(soapObject.getPropertyAsString("uId"));

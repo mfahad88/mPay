@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -136,6 +137,14 @@ public class AccountActivity extends AppCompatActivity {
 
             }
         });
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent=new Intent(AccountActivity.this,PaymentActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        },20000);
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -190,7 +199,7 @@ public class AccountActivity extends AppCompatActivity {
                 trxBean.setoId(userObject.getString("oId"));
                 trxBean.setuId(userObject.getString("uId"));
                 trxBean.setAppId(1);
-                trxBean.setDescription("testing");
+                trxBean.setDescription("mPAY");
                 trxBean.setProcessCode(0);
                 trxBean.setProductId(1);
                 Log.e("PaymentBean",trxBean.toString());
@@ -213,10 +222,10 @@ public class AccountActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
             if(aBoolean){
+                progressDialog.dismiss();
                Intent intent=new Intent(AccountActivity.this,TransactionActivity.class);
                 intent.putExtra("refNo",refNo);
                 intent.putExtra("Amount",new Double(sharedPreferences2.getString("Amount","0")));
-                progressDialog.dismiss();
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }else{
@@ -255,13 +264,13 @@ public class AccountActivity extends AppCompatActivity {
                 trxBean.setoId(userObject.getString("oId"));
                 trxBean.setuId(userObject.getString("uId"));
                 trxBean.setAppId(1);
-                trxBean.setDescription("testing");
+                trxBean.setDescription("mPAY");
                 trxBean.setProcessCode(0);
                 trxBean.setProductId(1);
                 Log.e("PaymentBean",trxBean.toString());
                 accountBean=ApplicationManager.Account_TRX(trxBean);
                 if(Integer.parseInt(accountBean.getErrorCode())==0 && Integer.parseInt(accountBean.getProcessCode())==1){
-                    refNo= String.valueOf(accountBean.getTrxNoPoints());
+                    refNo= String.valueOf(accountBean.getTrxNoImal());
                     status=true;
                 }else{
                     status=false;

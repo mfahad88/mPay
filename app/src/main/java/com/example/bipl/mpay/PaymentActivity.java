@@ -23,6 +23,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -62,7 +63,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     DialogFragment dialogFragment;
     public static final String MyPREFERENCES = "paymentPrefs" ;
     public static final int CONTEXT=Context.MODE_PRIVATE;
-
+    private String editableCNIC="";
     protected void clearSession() {
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.clear();
@@ -126,6 +127,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
             }
         });
+       
         try {
             JSONObject jsonObject=new JSONObject(sharedpreferences.getString("UserLoginBean",""));
             JSONObject jsonObject1=new JSONObject(jsonObject.getString("user"));
@@ -176,16 +178,17 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         if (v.getTag() != null && "number_button".equals(v.getTag())) {
             if(focusCheck==0) {
-                edit_amount.append(((TextView) v).getText().toString());
+                edit_amount.append(((TextView) v).getText());
             }if(focusCheck==1){
                 if(edit_cnic.length()==5 || edit_cnic.length()==13) {
 
-                    edit_cnic.setText(edit_cnic.getText()+"-");
+                edit_cnic.setText(edit_cnic.getText()+"-");
                 }
                 if(!((TextView)v).getText().equals(".") && edit_cnic.getText().length()<15) {
 
                     edit_cnic.append(((TextView) v).getText());
                 }
+
             }
 
         }

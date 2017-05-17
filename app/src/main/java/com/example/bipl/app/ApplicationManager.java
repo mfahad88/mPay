@@ -37,8 +37,8 @@ import java.util.List;
 
 public class ApplicationManager {
     private final static String NAMESPACE = "http://ws.bi.com/";
-    //private final static String URL = "http://192.168.161.1:59084/BIPOS_WS/BiPosWSService";
-    private final static String URL = "http://10.7.255.77:59084/BIPOS_WS/BiPosWSService";
+    private final static String URL = "http://192.168.161.1:59084/BIPOS_WS/BiPosWSService";
+//    private final static String URL = "http://10.7.255.77:59084/BIPOS_WS/BiPosWSService";
     private final static String SOAP_ACTION = "http://ws.bi.com/";
 
     @SuppressLint("LongLogTag")
@@ -235,53 +235,6 @@ public class ApplicationManager {
         return accountBean;
     }
 
-  /*  public static int Payment(PaymentBean paymentBean){
-        String METHOD_NAME = "TRX";
-        String SOAP_ACTION = "http://ws.bi.com/";
-        int trxNo=0;
-
-        try{
-            SoapObject request=new SoapObject(NAMESPACE,METHOD_NAME);
-            SoapObject object=new SoapObject();
-
-
-            object.addProperty("appId",paymentBean.getAppId());
-            object.addProperty("cnic",paymentBean.getCnic());
-            object.addProperty("thumb","");
-            object.addProperty("flag",paymentBean.getFlag());
-            object.addProperty("token",paymentBean.getToken());
-            object.addProperty("mId",paymentBean.getmId());
-            object.addProperty("oId",paymentBean.getoId());
-            object.addProperty("uId",paymentBean.getuId());
-            object.addProperty("amount",paymentBean.getAmount());
-            object.addProperty("processCode",paymentBean.getProcessCode());
-            object.addProperty("productId",paymentBean.getProductId());
-            object.addProperty("description",paymentBean.getDescription());
-            request.addProperty("arg0",object);
-
-
-            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-            envelope.setOutputSoapObject(request);
-            HttpTransportSE httpTransportSE=new HttpTransportSE(URL);
-            httpTransportSE.debug=true;
-            List<HeaderProperty> list=new ArrayList<>();
-            list.add(new HeaderProperty("uname","adnan"));
-            list.add(new HeaderProperty("pass","adnan123"));
-
-            httpTransportSE.call(SOAP_ACTION, envelope,list);
-            SoapObject soapObject=(SoapObject)envelope.getResponse();
-            Log.e("Request>>>>>>>>>>>>>",httpTransportSE.requestDump);
-            Log.e("Response>>>>>>>>>>>>>",httpTransportSE.responseDump);
-            if(soapObject.getPropertyAsString("errorCode").equals("0")&& soapObject.getPropertyAsString("processCode").equals("1")){
-                trxNo= Integer.parseInt(soapObject.getPropertyAsString("trxNoImal"));
-                Log.e("Payment>>>>>>>>",soapObject.toString());
-            }
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return trxNo;
-    }*/
 
     public static void helloWorld(String name){
         Boolean status=false;

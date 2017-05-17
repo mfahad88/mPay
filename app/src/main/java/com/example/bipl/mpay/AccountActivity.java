@@ -90,11 +90,14 @@ public class AccountActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 RadioButton radioButton=(RadioButton)findViewById(checkedId);
-                if(radioButton.getText().toString().trim().equals("Account")){
-                    new paymentAccount().execute();
-                }
-                if(radioButton.getText().toString().trim().equals("Loyality")){
-                    new paymentLoyality().execute();
+                if(group.getCheckedRadioButtonId()!=0) {
+                Toast.makeText(AccountActivity.this, String.valueOf(checkedId), Toast.LENGTH_SHORT).show();
+                    if (radioButton.getText().toString().trim().equals("Account")) {
+                        new paymentAccount().execute();
+                    }
+                    if (radioButton.getText().toString().trim().equals("Loyality")) {
+                        new paymentLoyality().execute();
+                    }
                 }
             }
         });

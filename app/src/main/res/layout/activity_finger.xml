@@ -3,61 +3,134 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_finger"
-    android:layout_width="800dp"
-    android:layout_height="500dp"
+    android:layout_width="match_parent"
+    android:layout_height="400sp"
     android:background="@drawable/border_frag"
     tools:context="com.example.bipl.mpay.FingerActivity">
+
     <RelativeLayout
-        android:layout_width="800dp"
-        android:layout_height="500dp"
-        android:background="#0273BC">
+        android:layout_width="match_parent"
+        android:layout_height="400sp"
+        android:background="#0273BC"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
     <RelativeLayout
-        android:layout_width="800dp"
-        android:layout_height="500dp"
+        android:layout_width="match_parent"
+        android:layout_height="400sp"
         android:layout_below="@+id/layoutHeader"
         android:background="@drawable/background">
-    <TableLayout
-        android:layout_marginTop="50sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/tableLayout">
 
-        <TableRow
+        <TextView
+            android:layout_marginTop="50sp"
+            android:text="@string/please_put_your_thumb"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal">
-
-            <TextView
-                android:text="@string/please_put_your_thumb"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/textColor"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:gravity="center_horizontal|center_vertical"
-                android:id="@+id/textViewTitle" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:layout_marginLeft="18sp"
-            android:layout_marginRight="18sp">
+            android:textColor="@color/textColor"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:gravity="center_horizontal|center_vertical"
+            android:id="@+id/textViewTitle" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/thumb"
-                android:layout_below="@+id/tableLayout"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="30sp"
-                android:layout_marginBottom="60sp"
-                android:id="@+id/imageView" />
 
-        </TableRow>
+        <ImageView
+            android:layout_marginTop="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/thumb"
+            android:id="@+id/imageView"
+            android:layout_below="@+id/textViewTitle" />
 
-    </TableLayout>
+        <ImageView
+            android:layout_marginTop="60dp"
+            android:layout_width="150dp"
+            android:layout_height="130dp"
+            android:id="@+id/fingerprintImage"
+            android:layout_alignTop="@+id/imageView"
+            android:layout_marginLeft="190dp"/>
+
+        <!-- <TableLayout
+             android:layout_marginTop="50sp"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:id="@+id/tableLayout">
+
+             <TableRow
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:gravity="center_horizontal">
+
+                 <TextView
+                     android:text="@string/please_put_your_thumb"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:textColor="@color/textColor"
+                     android:textSize="22sp"
+                     android:textStyle="bold"
+                     android:gravity="center_horizontal|center_vertical"
+                     android:id="@+id/textViewTitle" />
+             </TableRow>
+
+             <TableRow
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:gravity="center_horizontal"
+                 android:layout_marginLeft="18sp"
+                 android:layout_marginRight="18sp">
+
+                 <ImageView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 app:srcCompat="@drawable/thumb"
+                 android:layout_below="@+id/tableLayout"
+                 android:layout_centerHorizontal="true"
+                 android:layout_marginTop="30sp"
+                 android:layout_marginBottom="60sp"
+                 android:id="@+id/imageView">
+                 </ImageView>
+
+             </TableRow>
+             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                 android:layout_width="fill_parent"
+                 android:layout_height="fill_parent"
+                 android:orientation="vertical" >
+
+
+                 <LinearLayout
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_gravity="center_horizontal"
+
+                     android:gravity="center"
+                     android:orientation="vertical" >
+
+                     <Button
+                         android:id="@+id/btnEnrol"
+                         android:layout_width="200dp"
+                         android:layout_height="wrap_content"
+                         android:text="Enrol fingerprint"
+                         android:textSize="20sp" />
+
+
+                     <Button
+                         android:id="@+id/buttonTest"
+                         android:layout_width="200dp"
+                         android:layout_height="wrap_content"
+                         android:text="TEST"
+                         android:visibility="gone" />
+
+                     <Button
+                         android:id="@+id/backBack"
+                         android:layout_width="200dp"
+                         android:layout_height="wrap_content"
+                         android:text="Exit"
+                         android:textSize="20sp" />
+                 </LinearLayout>
+
+
+
+             </LinearLayout>
+         </TableLayout>-->
 </RelativeLayout>
     </RelativeLayout>
 

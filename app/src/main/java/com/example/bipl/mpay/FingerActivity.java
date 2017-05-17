@@ -6,8 +6,13 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,18 +25,59 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bipl.app.ApplicationManager;
 import com.example.bipl.data.TrxBean;
 import com.example.bipl.util.EditDialogListener;
+import com.fgtit.data.wsq;
+import com.fgtit.fpcore.FPMatch;
+import com.fgtit.fptest.MainActivity;
+import com.fgtit.utils.ToastUtil;
 
 import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+
+import android_serialport_api.AsyncFingerprint;
+import android_serialport_api.SerialPortManager;
 
 public class FingerActivity extends DialogFragment {
     TextView tv_title;
     View view;
     EditDialogListener dialogListener;
+    public static final int	IMG_WIDTH=256;
+    public static final int	IMG_HEIGHT=288;
+    public static final int	IMG_SIZE=73728;
+    public static final int	WSQBUFSIZE=200000;
+
+    private AsyncFingerprint fingerprint;
+    private int bWorkmode=0;
+    private Button start;
+    private Button validate;
+    private Button back;
+    private Button buttonTest;
+    private ImageView fingerprintImage;
+    private CheckBox checkBox;
+
+    private ProgressDialog progressDialog;
+
+    private int count;
+    private boolean IsUpImage=false;
+
+    private Boolean status=false;
+
+    private boolean bCancel=false;
+    private int cancelCount=0;
+    private int cancelMax=10;
 
     @NonNull
     @Override
@@ -52,12 +98,29 @@ public class FingerActivity extends DialogFragment {
         Typeface typeface=Typeface.createFromAsset(view.getContext().getAssets(), "font/palatino-linotype.ttf");
         tv_title.setTypeface(typeface);
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
-
         dialogListener= (EditDialogListener) getActivity();
+
+        fingerprintImage = (ImageView)view.findViewById(R.id.fingerprintImage);
+
+        initFingerprint();
+
+        FPMatch.getInstance().InitMatch();
+        if(progressDialog==null){
+            IsUpImage=true;
+            count = 1;
+            bWorkmode=0;
+            //showProgressDialog("Place finger£¡");
+            bCancel=false;
+            cancelCount=0;
+            fingerprint.FP_GetImage();
+        }else{
+            progressDialog.show();
+        }
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                dialogListener.updateResult("FingerXYZ");
+                dialogListener.capturedImage(status);
             }
         },5000);
 
@@ -67,5 +130,152 @@ public class FingerActivity extends DialogFragment {
     @Override
     public void onCancel(DialogInterface dialog) {
 
+    }
+
+    private void initFingerprint() {
+        fingerprint = SerialPortManager.getInstance().getNewAsyncFingerprint();
+
+        fingerprint.setOnGetImageListener(new AsyncFingerprint.OnGetImageListener() {
+            @Override
+            public void onGetImageSuccess() {
+                cancleProgressDialog();
+                if(IsUpImage){
+                    if(fingerprintImage.getDrawable()==null) {
+                        tv_title.setText("Processing...");
+                        fingerprint.FP_UpImage();
+                    }
+                   // showProgressDialog("Processing...");
+                }else{
+                    fingerprint.FP_GenChar(1);
+                }
+            }
+
+            @Override
+            public void onGetImageFail() {
+                if(bCancel){
+                    cancleProgressDialog();
+                   // ToastUtil.showToast(view.getContext(), "Cancel");
+                }else{
+                    fingerprint.FP_GetImage();
+                }
+            }
+        });
+
+        fingerprint.setOnUpImageListener(new AsyncFingerprint.OnUpImageListener() {
+            @Override
+            public void onUpImageSuccess(byte[] data) {
+                Log.i("whw", "up image data.length="+data.length);
+                DispFP(data);
+                fingerprint.FP_GenChar(1);
+            }
+
+            @Override
+            public void onUpImageFail() {
+                Log.i("whw", "up image fail");
+            }
+        });
+
+        fingerprint.setOnGenCharListener(new AsyncFingerprint.OnGenCharListener() {
+            @Override
+            public void onGenCharSuccess(int bufferId) {
+                cancleProgressDialog();
+                //showMessage("Generate features success£¡");
+
+                fingerprint.FP_UpChar();
+            }
+
+            @Override
+            public void onGenCharFail() {
+                cancleProgressDialog();
+                //showMessage("Generate features fail£¡");
+                Log.i("whw", "validateFingerprint onGenCharFail");
+            }
+        });
+
+    }
+
+    public void DispFP(byte[] data){
+        byte[] outdata=new byte[WSQBUFSIZE];
+        byte[] wsqdata=new byte[WSQBUFSIZE];
+        int[] wsqsize=new int[1];
+        byte[] inpdata=new byte[IMG_WIDTH*IMG_HEIGHT];
+        int inpsize=IMG_WIDTH*IMG_HEIGHT;
+        System.arraycopy(data,1078, inpdata, 0, inpsize);
+        wsq.getInstance().RawToWsq(inpdata,IMG_SIZE,IMG_WIDTH,IMG_HEIGHT, wsqdata, wsqsize,2.833755f);
+        try {
+            String filename= Environment.getExternalStorageDirectory()+"/test.wsq";
+            File f=new File(filename);
+            if(f.exists()){
+                f.delete();
+            }
+            new File(filename);
+
+            RandomAccessFile randomFile = new RandomAccessFile(filename, "rw");
+            long fileLength = randomFile.length();
+            randomFile.seek(fileLength);
+            randomFile.write(wsqdata, 0, wsqsize[0]);
+            randomFile.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Bitmap image = BitmapFactory.decodeByteArray(data, 0,data.length);
+        //image.setDensity(200);
+        image.setDensity(50);
+        //fingerprintImage.setBackgroundDrawable(new BitmapDrawable(image));
+        fingerprintImage.setImageDrawable(new BitmapDrawable(image));
+        if(fingerprintImage.getDrawable()!=null){
+            tv_title.setText("Processed...");
+            status=true;
+        }
+
+    }
+
+
+    private void showProgressDialog(String message) {
+        //*
+        progressDialog = new ProgressDialog(view.getContext());
+        progressDialog.setMessage(message);
+        if (!progressDialog.isShowing()) {
+            progressDialog.show();
+        }
+        //*/
+    }
+
+    private void cancleProgressDialog() {
+        ///*
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.cancel();
+            progressDialog = null;
+        }
+        //*/
+    }
+
+    @Override
+    public void onStop() {
+        cancleProgressDialog();
+        if(SerialPortManager.getInstance().isOpen()){
+            bCancel=true;
+            SerialPortManager.getInstance().closeSerialPort();
+        }
+        super.onStop();
+    }
+
+    @Override
+    public void onPause() {
+        cancleProgressDialog();
+        if(SerialPortManager.getInstance().isOpen()){
+            bCancel=true;
+            SerialPortManager.getInstance().closeSerialPort();
+        }
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        bCancel=false;
+        cancelCount=0;
+        initFingerprint();
     }
 }

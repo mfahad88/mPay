@@ -134,9 +134,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tableLayout"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="30sp">
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
         <include layout="@layout/layout_pinpad"/>
     </RelativeLayout>
     </RelativeLayout>

@@ -36,6 +36,7 @@ import com.example.bipl.app.ApplicationManager;
 import com.example.bipl.data.AccountBean;
 import com.example.bipl.data.TrxBean;
 import com.example.bipl.util.EditDialogListener;
+import com.fgtit.fptest.MainActivity;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -238,6 +239,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             if (!TextUtils.isEmpty(edit_amount.getText().toString()) && edit_cnic.getText().length()==15) {
                 dialogFragment=new FingerActivity();
                 dialogFragment.show(getSupportFragmentManager(),"Finger");
+              /*  Intent intent=new Intent(PaymentActivity.this,MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);*/
 
             } else {
                 focusCheck=0;
@@ -250,9 +254,16 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void updateResult(String inputText) {
-        Log.e("Finger>>>>>>>>>>>>",inputText);
-        dialogFragment.dismiss();
-        new Trxasync().execute();
+        //Log.e("Finger>>>>>>>>>>>>",inputText);
+
+    }
+
+    @Override
+    public void capturedImage(Boolean status) {
+        if (status){
+            dialogFragment.dismiss();
+            new Trxasync().execute();
+        }
     }
 
 

@@ -54,6 +54,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         edt_password.setTypeface(typeface);
         btn_login.setTypeface(typeface);
         btn_login.setOnClickListener(this);
+        edt_username.setText("M1T1U2");
+        edt_password.setText("test123");
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);

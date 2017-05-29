@@ -7,7 +7,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.StrictMode;
@@ -15,16 +18,21 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
+import android.util.TypedValue;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bipl.app.ApplicationManager;
 import com.example.bipl.data.UserLoginBean;
+import com.example.bipl.util.FontHelper;
 import com.google.gson.Gson;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -35,12 +43,79 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public static final int CONTEXT=Context.MODE_PRIVATE;
     SharedPreferences sharedpreferences;
     ImageView powerbtn;
+    String editUser,editPass;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        edt_username.setEnabled(false);
+        edt_password.setEnabled(false);
+        btn_login.setEnabled(false);
+        powerbtn.setEnabled(false);
+        edt_username.setText(null);
+        edt_password.setText(null);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        tv_title.setTextSize(TypedValue.COMPLEX_UNIT_PX, FontHelper.fontGenerator(this,7.0f));
+        edt_username.setTextSize(TypedValue.COMPLEX_UNIT_PX, FontHelper.fontGenerator(this,4.0f));
+        edt_password.setTextSize(TypedValue.COMPLEX_UNIT_PX, FontHelper.fontGenerator(this,4.0f));
+        btn_login.setTextSize(TypedValue.COMPLEX_UNIT_PX, FontHelper.fontGenerator(this,4.0f));
+        tv_forgot.setTextSize(TypedValue.COMPLEX_UNIT_PX, FontHelper.fontGenerator(this,4.0f));
+        edt_username.setEnabled(true);
+        edt_password.setEnabled(true);
+        btn_login.setEnabled(true);
+        powerbtn.setEnabled(true);
+        if(editUser!=null){
+            edt_username.setText(editUser);
+        }
+        if(editPass!=null){
+            edt_password.setText(editPass);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        edt_username.setEnabled(false);
+        edt_password.setEnabled(false);
+        btn_login.setEnabled(false);
+        powerbtn.setEnabled(false);
+        edt_username.setText(null);
+        edt_password.setText(null);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        edt_username.setEnabled(true);
+        edt_password.setEnabled(true);
+        btn_login.setEnabled(true);
+        powerbtn.setEnabled(true);
+        edt_username.setText(null);
+        edt_password.setText(null);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        editUser=edt_username.getText().toString();
+        editPass=edt_password.getText().toString();
+        edt_username.setEnabled(false);
+        edt_password.setEnabled(false);
+        btn_login.setEnabled(false);
+        powerbtn.setEnabled(false);
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
         setContentView(R.layout.activity_login);
+
         tv_title=(TextView)findViewById(R.id.textViewTitle);
         tv_forgot=(TextView)findViewById(R.id.textViewForgot);
         edt_username=(EditText)findViewById(R.id.edittextUsername);
@@ -114,13 +189,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.clear();
         editor.commit();
-
     }
 
     @Override
     public void onClick(View v) {
        if(v.getId()==R.id.buttonLogin){
-           if(edt_username.getText().toString().trim()!=null && edt_password.getText().toString().trim()!=null) {
+           if(edt_username.getText().toString().trim()!=null && edt_password.getText().toString().trim()!=null
+                   && !edt_username.getText().toString().trim().equals("") && !edt_password.getText().toString().trim().equals("")) {
                new loginAsync().execute(edt_username.getText().toString(), edt_password.getText().toString());
            }
        }

@@ -1,7 +1,7 @@
 package com.example.bipl.util;
 
 public interface EditDialogListener {
-        void updateResult(String inputText);
+        void imageString(byte[] inputText);
 
         void capturedImage(Boolean status);
     }

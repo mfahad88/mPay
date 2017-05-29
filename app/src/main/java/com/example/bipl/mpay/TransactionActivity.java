@@ -1,6 +1,8 @@
 package com.example.bipl.mpay;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 
 public class TransactionActivity extends AppCompatActivity {
     TextView tv_title,tv_ref,tv_amt;
+    Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,5 +34,15 @@ public class TransactionActivity extends AppCompatActivity {
                 startActivity(i);
             }
         },5000);
+        SharedPreferences sharedPreferences=getSharedPreferences(PaymentActivity.MyPREFERENCES,PaymentActivity.CONTEXT);
+        //SharedPreferences sharedPreferences=context.getSharedPreferences(PaymentActivity.MyPREFERENCES,PaymentActivity.CONTEXT);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 }

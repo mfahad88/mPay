@@ -13,7 +13,9 @@ import android.os.Build;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +29,8 @@ import com.example.bipl.app.ApplicationManager;
 import com.example.bipl.data.AccountBean;
 import com.example.bipl.data.PaymentBean;
 import com.example.bipl.data.TrxBean;
+import com.example.bipl.util.EditDialogListener;
+import com.example.bipl.util.FontHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,6 +46,94 @@ public class AccountActivity extends AppCompatActivity {
     Button btn_cancel;
     ImageView powerbtn;
     private String refNo;
+    String accountTitle,accountNum,Points,WorthPoints;
+    final Handler handler=new Handler();
+    byte[] imgFinger;
+    @Override
+    protected void onStart() {
+        super.onStart();
+        accName.setEnabled(false);
+        accNum.setEnabled(false);
+        accPoints.setEnabled(false);
+        accpointWorth.setEnabled(false);
+        tv_accName.setEnabled(false);
+        tv_accNum.setEnabled(false);
+        tv_accPoints.setEnabled(false);
+        tvTitle.setEnabled(false);
+        btn_cancel.setEnabled(false);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, FontHelper.fontGenerator(this,6.0f));
+        accName.setTextSize(TypedValue.COMPLEX_UNIT_PX, FontHelper.fontGenerator(this,4.0f));
+        accNum.setTextSize(TypedValue.COMPLEX_UNIT_PX, FontHelper.fontGenerator(this,4.0f));
+        accPoints.setTextSize(TypedValue.COMPLEX_UNIT_PX, FontHelper.fontGenerator(this,4.0f));
+        accpointWorth.setTextSize(TypedValue.COMPLEX_UNIT_PX, FontHelper.fontGenerator(this,4.0f));
+        tv_accName.setTextSize(TypedValue.COMPLEX_UNIT_PX, FontHelper.fontGenerator(this,4.0f));
+        tv_accNum.setTextSize(TypedValue.COMPLEX_UNIT_PX, FontHelper.fontGenerator(this,4.0f));
+        btn_cancel.setTextSize(TypedValue.COMPLEX_UNIT_PX, FontHelper.fontGenerator(this,4.0f));
+        radioLoyality.setTextSize(TypedValue.COMPLEX_UNIT_PX, FontHelper.fontGenerator(this,4.0f));
+        radioAccount.setTextSize(TypedValue.COMPLEX_UNIT_PX, FontHelper.fontGenerator(this,4.0f));
+        accName.setEnabled(true);
+        accNum.setEnabled(true);
+        accPoints.setEnabled(true);
+        accpointWorth.setEnabled(true);
+        tv_accName.setEnabled(true);
+        tv_accNum.setEnabled(true);
+        tv_accPoints.setEnabled(true);
+        tvTitle.setEnabled(true);
+        btn_cancel.setEnabled(true);
+        if(accName.getText()!=null){
+            accName.setText(accountTitle);
+        }
+        if(accNum.getText()!=null){
+            accNum.setText(accountNum);
+        }
+        if(accPoints.getText()!=null){
+            accPoints.setText(Points);
+        }
+        if(accpointWorth.getText()!=null){
+            accpointWorth.setText(WorthPoints);
+        }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        accName.setEnabled(false);
+        accNum.setEnabled(false);
+        accPoints.setEnabled(false);
+        accpointWorth.setEnabled(false);
+        tv_accName.setEnabled(false);
+        tv_accNum.setEnabled(false);
+        tv_accPoints.setEnabled(false);
+        tvTitle.setEnabled(false);
+        btn_cancel.setEnabled(false);
+        if(accName.getText()!=null){
+            accountTitle=accName.getText().toString();
+        }
+        if(accNum.getText()!=null){
+            accountNum=accNum.getText().toString();
+        }
+        if(accPoints.getText()!=null){
+            Points=accPoints.getText().toString();
+        }
+        if(accpointWorth.getText()!=null){
+            WorthPoints=accpointWorth.getText().toString();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
 
     protected void clearSession() {
 
@@ -60,6 +152,9 @@ public class AccountActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences(LoginActivity.MyPREFERENCES, Context.MODE_PRIVATE);
         sharedPreferences2=getSharedPreferences(PaymentActivity.MyPREFERENCES,PaymentActivity.CONTEXT);
+        Log.e("sharedPreferences>>>>", String.valueOf(sharedPreferences.getAll()));
+        Log.e("sharedPreferences2>>>>", String.valueOf(sharedPreferences2.getAll()));
+        imgFinger= Base64.decode(sharedPreferences2.getString("finger",""),Base64.DEFAULT);
         tvTitle= (TextView) findViewById(R.id.textViewTitle);
         tv_accName=(TextView)findViewById(R.id.textViewaccName) ;
         tv_accNum=(TextView)findViewById(R.id.textViewaccNum);
@@ -73,7 +168,7 @@ public class AccountActivity extends AppCompatActivity {
         radioLoyality=(RadioButton)findViewById(R.id.radioLoyalty);
         radioAccount=(RadioButton)findViewById(R.id.radioAccount);
         btn_cancel=(Button)findViewById(R.id.buttonCancel) ;
-        new accountAsync().execute();
+
         Typeface typeface=Typeface.createFromAsset(getAssets(),"font/palatino-linotype.ttf");
         tvTitle.setTypeface(typeface);
         accName.setTypeface(typeface);
@@ -86,16 +181,18 @@ public class AccountActivity extends AppCompatActivity {
         tv_accpointWorth.setTypeface(typeface);
         radioLoyality.setTypeface(typeface);
         radioAccount.setTypeface(typeface);
+        new accountAsync().execute();
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 RadioButton radioButton=(RadioButton)findViewById(checkedId);
                 if(group.getCheckedRadioButtonId()!=0) {
-                Toast.makeText(AccountActivity.this, String.valueOf(checkedId), Toast.LENGTH_SHORT).show();
                     if (radioButton.getText().toString().trim().equals("Account")) {
+                        handler.removeCallbacksAndMessages(null);
                         new paymentAccount().execute();
                     }
                     if (radioButton.getText().toString().trim().equals("Loyality")) {
+                        handler.removeCallbacksAndMessages(null);
                         new paymentLoyality().execute();
                     }
                 }
@@ -113,6 +210,7 @@ public class AccountActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
+                        logout();
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                             clearSession();
                             AccountActivity.this.finishAffinity();
@@ -140,12 +238,13 @@ public class AccountActivity extends AppCompatActivity {
 
             }
         });
-        new Handler().postDelayed(new Runnable() {
+        handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 Intent intent=new Intent(AccountActivity.this,PaymentActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+
             }
         },20000);
         btn_cancel.setOnClickListener(new View.OnClickListener() {
@@ -153,6 +252,7 @@ public class AccountActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent=new Intent(AccountActivity.this,PaymentActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                handler.removeCallbacksAndMessages(null);
                 startActivity(intent);
             }
         });
@@ -163,11 +263,24 @@ public class AccountActivity extends AppCompatActivity {
     public void onBackPressed() {
 
     }
+    public void logout(){
+        try {
+            Log.e("Logout>>>>>","Inside");
+
+            JSONObject jsonObject = new JSONObject(sharedPreferences.getAll());
+            JSONObject object = new JSONObject(jsonObject.getString("UserLoginBean"));
+            JSONObject userObject = new JSONObject(object.getString("user"));
+            ApplicationManager.Logout(object.getString("token"), object.getString("loginId"), object.getInt("appId"), userObject.getString("mId"), userObject.getString("oId"), userObject.getString("uId"));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
 
     public class paymentAccount extends AsyncTask<Void,Void,Boolean>{
         String errorDesc;
         ProgressDialog progressDialog;
-        @Override
+       @Override
         protected void onPreExecute() {
             super.onPreExecute();
             progressDialog=new ProgressDialog(AccountActivity.this);
@@ -201,6 +314,7 @@ public class AccountActivity extends AppCompatActivity {
                 trxBean.setmId(userObject.getString("mId"));
                 trxBean.setoId(userObject.getString("oId"));
                 trxBean.setuId(userObject.getString("uId"));
+                trxBean.setThumb(imgFinger);
                 trxBean.setAppId(1);
                 trxBean.setDescription("mPAY");
                 trxBean.setProcessCode(0);
@@ -233,7 +347,11 @@ public class AccountActivity extends AppCompatActivity {
                 startActivity(intent);
             }else{
                 progressDialog.dismiss();
-                Toast.makeText(AccountActivity.this, errorDesc, Toast.LENGTH_SHORT).show();
+                Toast.makeText(AccountActivity.this, errorDesc, Toast.LENGTH_LONG).show();
+                Intent intent=new Intent(AccountActivity.this,PaymentActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                handler.removeCallbacksAndMessages(null);
+                startActivity(intent);
             }
         }
     }
@@ -258,7 +376,6 @@ public class AccountActivity extends AppCompatActivity {
                 Log.e("CNIC",sharedPreferences2.getString("Cnic",""));
                 Log.e("Amount",sharedPreferences2.getString("Amount","0"));
 
-
                 trxBean.setFlag("LOY_TRX");
                 trxBean.setCnic(sharedPreferences2.getString("Cnic",""));
                 trxBean.setAmount(sharedPreferences2.getString("Amount","0"));
@@ -266,6 +383,7 @@ public class AccountActivity extends AppCompatActivity {
                 trxBean.setmId(userObject.getString("mId"));
                 trxBean.setoId(userObject.getString("oId"));
                 trxBean.setuId(userObject.getString("uId"));
+                trxBean.setThumb(imgFinger);
                 trxBean.setAppId(1);
                 trxBean.setDescription("mPAY");
                 trxBean.setProcessCode(0);
@@ -297,6 +415,10 @@ public class AccountActivity extends AppCompatActivity {
                 startActivity(intent);
             }else{
                 Toast.makeText(AccountActivity.this, errorDesc, Toast.LENGTH_SHORT).show();
+                Intent intent=new Intent(AccountActivity.this,PaymentActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                handler.removeCallbacksAndMessages(null);
+                startActivity(intent);
             }
         }
     }
@@ -309,6 +431,7 @@ public class AccountActivity extends AppCompatActivity {
             JSONObject jsonObject = null;
             if (extras != null) {
                 jsonMyObject = extras.getString("accountBean");
+
             }
             try {
                 jsonObject=new JSONObject(jsonMyObject);

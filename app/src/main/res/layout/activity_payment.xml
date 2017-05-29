@@ -2,60 +2,97 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_payment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:background="#0273BC"
     tools:context="com.example.bipl.mpay.PaymentActivity">
 
-    <RelativeLayout
-        android:layout_marginTop="15sp"
-        android:layout_marginRight="15sp"
-        android:layout_marginLeft="15sp"
-        android:layout_width="match_parent"
-        android:layout_height="300sp"
-        android:background="@android:color/white"
-        android:id="@+id/layoutHeader">
-        <ImageView
-            android:layout_marginLeft="520dp"
-            android:layout_marginTop="10dp"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:src="@drawable/powerred"
-            android:id="@+id/imageViewPower"/>
-        <ImageView
-            android:layout_marginTop="50sp"
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/mpay_logo"/>
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="0dp"
-        android:layout_margin="0dp"
-        android:layout_below="@+id/layoutHeader"
-        android:background="@drawable/background">
-    <TableLayout
-        android:layout_marginTop="13sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:id="@+id/tableLayout">
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_weight=".5"
+            android:id="@+id/layoutUpper">
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:layout_marginLeft="18sp"
-            android:layout_marginRight="18sp">
-
-            <RelativeLayout
-
+            <LinearLayout
+                android:layout_marginTop="15sp"
+                android:layout_marginRight="15sp"
+                android:layout_marginLeft="15sp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@android:color/white"
+                android:id="@+id/layoutHeader">
 
-                <TextView
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:orientation="horizontal"
+                    android:layout_weight=".06"
+                    android:gravity="end"
+                    android:id="@+id/layoutRed">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_weight=".5"/>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_weight=".05">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/powerred"
+                        android:id="@+id/imageViewPower"/>
+                        </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:orientation="vertical"
+                    android:layout_weight=".3"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:id="@+id/layoutmPay">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="20dp"
+                        android:src="@drawable/mpay_logo"
+                        android:id="@+id/imageView3" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_weight="1.4"
+            android:background="@drawable/background"
+            android:gravity="center_horizontal"
+            android:layout_marginLeft="20sp"
+            android:layout_marginRight="20sp">
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                android:layout_weight=".15"
+                android:gravity="center_vertical"
+                android:id="@+id/subheadingLayout">
+            <TextView
                 android:text="Welcome"
                 android:textColor="@color/textColor"
                 android:textSize="24dp"
@@ -63,28 +100,27 @@
                 android:textStyle="bold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/textViewName"
-                />
-            </RelativeLayout>
-        </TableRow>
-
-        <TableRow
+                android:id="@+id/textViewName" />
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="30sp"
-            android:layout_marginLeft="18sp"
-            android:layout_marginRight="18sp">
-
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_weight=".2"
+            android:gravity="center_vertical"
+            android:id="@+id/layoutAmount">
             <android.support.design.widget.TextInputLayout
-                android:layout_width="550sp"
+                android:layout_below="@+id/textViewName"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/edittextAmountInput"
                 android:textColorHint="@color/textColor">
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Amount"
-                    android:textSize="24sp"
+                    android:textSize="22sp"
                     android:focusable="false"
                     android:textColor="@color/textColor"
                     android:textColorHint="@color/textColor"
@@ -96,47 +132,55 @@
                     android:id="@+id/edittextAmount"
                     />
             </android.support.design.widget.TextInputLayout>
-        </TableRow>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="18sp"
-            android:layout_marginRight="18sp">
+        </LinearLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_marginTop="5sp"
-                android:layout_width="550sp"
-                android:layout_height="wrap_content"
-                android:textColorHint="@color/textColor">
+         <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                android:layout_weight=".2"
+                android:id="@+id/layoutCnic"
+                android:gravity="center_vertical">
 
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/cnic"
-                    android:textColor="@color/textColor"
-                    android:textColorHint="@color/textColor"
-                    android:textSize="24sp"
-                    android:singleLine="true"
-                    android:focusable="false"
-                    android:ems="15"
-                    android:inputType="number"
-                    android:layout_marginLeft="5sp"
-                    android:layout_marginRight="5sp"
-                    android:id="@+id/edittextCNIC"
-                    />
-            </android.support.design.widget.TextInputLayout>
-        </TableRow>
+             <android.support.design.widget.TextInputLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:id="@+id/edittextCNICInput"
+                 android:textColorHint="@color/textColor">
 
-    </TableLayout>
+             <EditText
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:hint="@string/cnic"
+                 android:textColor="@color/textColor"
+                 android:textColorHint="@color/textColor"
+                 android:textSize="22sp"
+                 android:singleLine="true"
+                 android:focusable="false"
+                 android:ems="15"
+                 android:inputType="number"
+                 android:layout_marginLeft="5sp"
+                 android:layout_marginRight="5sp"
+                 android:id="@+id/edittextCNIC"
+                 />
+             </android.support.design.widget.TextInputLayout>
+         </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tableLayout"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp">
-        <include layout="@layout/layout_pinpad"/>
-    </RelativeLayout>
-    </RelativeLayout>
+         <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                android:layout_weight=".6"
+                android:layout_marginLeft="10sp"
+                android:layout_marginRight="10sp"
+                android:id="@+id/layoutKeypad">
+             <include layout="@layout/layout_pinpad"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"/>
+         </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
 </RelativeLayout>

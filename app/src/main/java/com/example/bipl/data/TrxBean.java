@@ -12,7 +12,7 @@ public class TrxBean {
     private String flag;
     private int processCode;
     private int productId;
-    private String thumb;
+    private byte[] thumb;
     private String token;
     private String mId;
     private String oId;
@@ -74,11 +74,11 @@ public class TrxBean {
         this.productId = productId;
     }
 
-    public String getThumb() {
+    public byte[] getThumb() {
         return thumb;
     }
 
-    public void setThumb(String thumb) {
+    public void setThumb(byte[] thumb) {
         this.thumb = thumb;
     }
 

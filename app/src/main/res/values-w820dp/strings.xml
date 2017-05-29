@@ -27,5 +27,6 @@
     <string name="loyality">Loyality</string>
     <string name="account">Account</string>
     <string name="cancel_transaction">Cancel Transaction</string>
+    <string name="products">Products</string>
 
 </resources>

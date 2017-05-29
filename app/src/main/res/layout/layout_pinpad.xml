@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
     <TableLayout
         android:id="@+id/keyboard"
         android:layout_width="match_parent"
@@ -88,11 +88,17 @@
                 android:elevation="5dp"
                 android:text="@string/number_zero"/>
 
-            <TextView
+            <!--<TextView
                 android:id="@+id/t9_key_backspace"
                 style="@style/keyboard_number_button"
                 android:text="◄"
                 android:textSize="30dp"
+                android:elevation="5dp" />-->
+
+            <TextView
+                android:id="@+id/t9_key_backspace"
+                style="@style/keyboard_number_button"
+                android:text="Back"
                 android:elevation="5dp" />
         </TableRow>
         <TableRow style="@style/keyboard_row">

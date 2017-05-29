@@ -6,251 +6,336 @@
     android:layout_height="match_parent"
     android:background="#0273BC"
     tools:context="com.example.bipl.mpay.AccountActivity">
-    <RelativeLayout
-        android:layout_marginTop="15sp"
-        android:layout_marginRight="15sp"
-        android:layout_marginLeft="15sp"
-        android:layout_width="match_parent"
-        android:layout_height="300sp"
-        android:background="@android:color/white"
-        android:id="@+id/layoutHeader">
-        <ImageView
-            android:layout_marginLeft="520dp"
-            android:layout_marginTop="10dp"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:src="@drawable/powerred"
-            android:id="@+id/imageViewPower"/>
-        <ImageView
-            android:layout_marginTop="50sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/mpay_logo"/>
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/layoutHeader"
-        android:background="@drawable/background">
-    <TableLayout
-        android:layout_marginTop="20sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="18sp"
-        android:layout_marginRight="18sp"
-        android:id="@+id/tableLayout">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
-        <TableRow
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal">
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_weight=".5"
+            android:id="@+id/layoutUpper">
 
-            <TextView
-                android:text="Please Verify Account Details"
+            <LinearLayout
+                android:layout_marginTop="15sp"
+                android:layout_marginRight="15sp"
+                android:layout_marginLeft="15sp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/textColor"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                android:gravity="center_horizontal|center_vertical"
-                android:id="@+id/textViewTitle" />
-        </TableRow>
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@android:color/white"
+                android:id="@+id/layoutHeader">
 
-        <TableRow
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:orientation="horizontal"
+                    android:layout_weight=".06"
+                    android:gravity="end"
+                    android:id="@+id/layoutRed">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_weight=".5"/>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_weight=".05">
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/powerred"
+                            android:id="@+id/imageViewPower"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:orientation="vertical"
+                    android:layout_weight=".3"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:id="@+id/layoutmPay">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="20dp"
+                        android:src="@drawable/mpay_logo"
+                        android:id="@+id/imageView3" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+              <!--body-->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="left"
-            android:layout_marginTop="40sp"
-            android:layout_marginLeft="18sp"
-            android:layout_marginRight="18sp">
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_weight="1.4"
+            android:background="@drawable/background"
+            android:gravity="center_horizontal"
+            android:layout_marginLeft="20sp"
+            android:layout_marginRight="20sp">
 
-            <TextView
-                android:layout_width="550sp"
-                android:layout_height="wrap_content"
-                android:text="Account Name"
-                android:textSize="22sp"
-                android:shadowColor="@color/colorAccent"
-                android:shadowDx="0"
-                android:shadowDy="0"
-                android:shadowRadius="30"
-                android:textColor="#000"
-                android:id="@+id/textViewaccName" />
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="left"
-            android:layout_marginLeft="18sp"
-            android:layout_marginRight="18sp">
-
-            <EditText
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:text="Account Name"
-                android:singleLine="true"
-                android:focusable="false"
-                android:textSize="24sp"
-                android:textColor="@color/textColor"
-                android:id="@+id/editTextaccName" />
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="left"
-            android:layout_marginTop="5sp"
-            android:layout_marginLeft="18sp"
-            android:layout_marginRight="18sp">
-
-            <TextView
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                android:layout_weight=".15"
+                android:gravity="center_vertical"
+                android:id="@+id/subheadingLayout">
+                <TextView
+                    android:text="Please Verify Account Details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textColor"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:id="@+id/textViewTitle" />
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Account Number"
-                android:textColor="#000"
-                android:textSize="22sp"
-                android:id="@+id/textViewaccNum" />
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                android:layout_marginLeft="18sp"
+                android:layout_marginRight="18sp"
+                android:layout_weight=".1">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Account Name"
+                    android:textSize="22sp"
+                    android:shadowColor="@color/colorAccent"
+                    android:shadowDx="0"
+                    android:shadowDy="0"
+                    android:shadowRadius="30"
+                    android:textColor="#000"
+                    android:id="@+id/textViewaccName" />
+            </LinearLayout>
 
-        </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="left"
-            android:layout_marginLeft="18sp"
-            android:layout_marginRight="18sp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                android:layout_marginLeft="18sp"
+                android:layout_marginRight="18sp"
+                android:layout_weight=".2">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:text="Account Name"
+                    android:singleLine="true"
+                    android:focusable="false"
+                    android:textSize="24sp"
+                    android:textColor="@color/textColor"
+                    android:id="@+id/editTextaccName" />
 
+            </LinearLayout>
 
-            <EditText
-                android:layout_width="550sp"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:text="Account Number"
-                android:singleLine="true"
-                android:focusable="false"
-                android:textSize="24sp"
-                android:textColor="@color/textColor"
-                android:id="@+id/editTextaccNum" />
-        </TableRow>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                android:layout_marginLeft="18sp"
+                android:layout_marginRight="18sp"
+                android:layout_weight=".1">
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="left"
-            android:layout_marginLeft="18sp"
-            android:layout_marginRight="18sp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Account Number"
+                    android:textColor="#000"
+                    android:textSize="22sp"
+                    android:id="@+id/textViewaccNum" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Points"
-                android:textSize="22sp"
-                android:layout_weight="1"
-                android:textColor="#000"
-                android:id="@+id/textViewaccPoints" />
+            </LinearLayout>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Point Worth"
-                android:textSize="22sp"
-                android:layout_weight="1"
-                android:textColor="#000"
-                android:id="@+id/textViewaccpointWorth" />
-
-        </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="left"
-            android:layout_marginLeft="18sp"
-            android:layout_marginRight="18sp">
-
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="number"
-                android:text="Points"
-                android:singleLine="true"
-                android:textSize="24sp"
-                android:focusable="false"
-                android:layout_gravity="left"
-                android:textColor="@color/textColor"
-                android:id="@+id/editTextpoints" />
-
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                android:layout_marginLeft="18sp"
+                android:layout_marginRight="18sp"
+                android:layout_weight=".2">
 
                 <EditText
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:inputType="number"
-                    android:textSize="24sp"
-                    android:text="Points Worth"
+                    android:text="Account Number"
                     android:singleLine="true"
-                    android:gravity="left"
                     android:focusable="false"
+                    android:textSize="24sp"
                     android:textColor="@color/textColor"
-                    android:id="@+id/editTextpointsWorth" />
-        </TableRow>
+                    android:id="@+id/editTextaccNum" />
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:layout_marginTop="25sp"
-            android:layout_marginLeft="18sp"
-            android:layout_marginRight="18sp">
+            </LinearLayout>
 
-            <RadioGroup
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="20sp"
-                android:paddingRight="20sp"
-                android:gravity="center_horizontal|center_vertical"
+                android:layout_height="0dp"
                 android:orientation="horizontal"
-                android:id="@+id/radioGroup">
+                android:layout_marginLeft="18sp"
+                android:layout_marginRight="18sp"
+                android:layout_weight=".1">
 
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_weight="0.5">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Points"
+                            android:textSize="22sp"
+                            android:layout_weight="1"
+                            android:textColor="#000"
+                            android:id="@+id/textViewaccPoints" />
+                    </LinearLayout>
 
-                <RadioButton
-                    android:textColor="@color/textColor"
-                    android:text="@string/loyality"
-                    android:textSize="22sp"
-                    android:gravity="center_horizontal|center_vertical"
-                    android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_weight="0.5">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Point Worth"
+                            android:textSize="22sp"
+                            android:layout_weight="1"
+                            android:textColor="#000"
+                            android:id="@+id/textViewaccpointWorth" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                android:layout_marginLeft="18sp"
+                android:layout_marginRight="18sp"
+                android:layout_weight=".2">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_weight="0.5">
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:inputType="number"
+                            android:text="Points"
+                            android:singleLine="true"
+                            android:textSize="24sp"
+                            android:focusable="false"
+                            android:layout_gravity="left"
+                            android:textColor="@color/textColor"
+                            android:id="@+id/editTextpoints" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_weight="0.5">
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:inputType="number"
+                            android:textSize="24sp"
+                            android:text="Points Worth"
+                            android:singleLine="true"
+                            android:gravity="left"
+                            android:focusable="false"
+                            android:textColor="@color/textColor"
+                            android:id="@+id/editTextpointsWorth" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                android:layout_weight=".2">
+
+                <RadioGroup
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/radioLoyalty"
-                    android:background="@drawable/button_border" />
-
-                <RadioButton
-                    android:textColor="@color/textColor"
-                    android:layout_marginLeft="20sp"
-                    android:text="@string/account"
-                    android:textSize="22sp"
                     android:gravity="center_horizontal|center_vertical"
-                    android:background="@drawable/button_border"
-                    android:layout_width="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/radioGroup">
+
+
+                    <RadioButton
+                        android:textColor="@color/textColor"
+                        android:text="@string/loyality"
+                        android:textSize="22sp"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/radioLoyalty"
+                        android:background="@drawable/button_border" />
+
+                    <RadioButton
+                        android:textColor="@color/textColor"
+                        android:layout_marginLeft="10sp"
+                        android:text="@string/account"
+                        android:textSize="22sp"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:background="@drawable/button_border"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/radioAccount" />
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                android:layout_weight=".3">
+                <Button
+                    android:layout_marginTop="20sp"
+                    android:text="@string/cancel_transaction"
+                    android:textColor="@color/textColor"
+                    android:textSize="22sp"
+                    android:layout_marginLeft="40sp"
+                    android:layout_marginRight="40sp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/radioAccount" />
+                    android:id="@+id/buttonCancel"
+                    android:background="@drawable/button_border"/>
+            </LinearLayout>
+            <!--body-->
+        </LinearLayout>
 
-            </RadioGroup>
-
-        </TableRow>
-
-    </TableLayout>
-        <Button
-            android:layout_marginTop="24sp"
-            android:text="@string/cancel_transaction"
-            android:textColor="@color/textColor"
-            android:textSize="22sp"
-            android:layout_marginLeft="40sp"
-            android:layout_marginRight="40sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/buttonCancel"
-            android:layout_below="@id/tableLayout"
-            android:background="@drawable/button_border"/>
-    </RelativeLayout>
+    </LinearLayout>
 </RelativeLayout>

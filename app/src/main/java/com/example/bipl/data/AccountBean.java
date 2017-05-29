@@ -15,8 +15,8 @@ public class AccountBean {
     private String errorCode;
     private String errorDesc;
     private String description;
-    private Long trxNoImal;
-    private Long trxNoPoints;
+    private String trxNoImal;
+    private String trxNoPoints;
     private int appId;
     private Long productId;
     private String token;
@@ -107,19 +107,19 @@ public class AccountBean {
         this.description = description;
     }
 
-    public Long getTrxNoImal() {
+    public String getTrxNoImal() {
         return trxNoImal;
     }
 
-    public void setTrxNoImal(Long trxNoImal) {
+    public void setTrxNoImal(String trxNoImal) {
         this.trxNoImal = trxNoImal;
     }
 
-    public Long getTrxNoPoints() {
+    public String getTrxNoPoints() {
         return trxNoPoints;
     }
 
-    public void setTrxNoPoints(Long trxNoPoints) {
+    public void setTrxNoPoints(String trxNoPoints) {
         this.trxNoPoints = trxNoPoints;
     }
 

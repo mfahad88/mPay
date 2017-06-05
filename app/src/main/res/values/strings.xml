@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">mPAY</string>
+    <string name="app_name">ThumbPay</string>
     <string name="merchant_sign_in">Merchant Sign in</string>
     <string name="username">Username</string>
     <string name="password">Password</string>

@@ -73,7 +73,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onStart() {
         super.onStart();
-
         edit_amount.setEnabled(false);
         edit_cnic.setEnabled(false);
         edit_amount.setText(null);

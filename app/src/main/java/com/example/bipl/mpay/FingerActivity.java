@@ -147,7 +147,7 @@ public class FingerActivity extends DialogFragment {
         fingerprint.setOnGetImageListener(new AsyncFingerprint.OnGetImageListener() {
             @Override
             public void onGetImageSuccess() {
-                cancleProgressDialog();
+               // cancleProgressDialog();
                 if(IsUpImage){
                     if(fingerprintImage.getDrawable()==null) {
                         tv_title.setText("Processing...");
@@ -157,6 +157,7 @@ public class FingerActivity extends DialogFragment {
                 }else{
                     fingerprint.FP_GenChar(1);
                 }
+
             }
 
             @Override
@@ -176,6 +177,7 @@ public class FingerActivity extends DialogFragment {
                 Log.i("whw", "up image data.length="+data.length);
                 DispFP(data);
                 fingerprint.FP_GenChar(1);
+
             }
 
             @Override
@@ -312,24 +314,24 @@ public class FingerActivity extends DialogFragment {
 
     @Override
     public void onStop() {
+        super.onStop();
         cancleProgressDialog();
         if(SerialPortManager.getInstance().isOpen()){
             bCancel=true;
             fpTimerStop();
             SerialPortManager.getInstance().closeSerialPort();
         }
-        super.onStop();
     }
 
     @Override
     public void onPause() {
+        super.onPause();
         cancleProgressDialog();
         if(SerialPortManager.getInstance().isOpen()){
             bCancel=true;
             fpTimerStop();
             SerialPortManager.getInstance().closeSerialPort();
         }
-        super.onPause();
     }
 
     @Override
@@ -337,7 +339,8 @@ public class FingerActivity extends DialogFragment {
         super.onResume();
         bCancel=false;
         cancelCount=0;
-        initFingerprint();
+       // initFingerprint();
+
     }
 
     @Override

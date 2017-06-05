@@ -246,7 +246,7 @@ public class AccountActivity extends AppCompatActivity {
                 startActivity(intent);
 
             }
-        },20000);
+        },60000);
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -358,7 +358,15 @@ public class AccountActivity extends AppCompatActivity {
 
     public class paymentLoyality extends AsyncTask<Void,Void,Boolean>{
         String errorDesc;
-
+        ProgressDialog progressDialog;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog=new ProgressDialog(AccountActivity.this);
+            progressDialog.setMessage("Please Wait...");
+            progressDialog.setTitle("Loading...");
+            progressDialog.show();
+        }
         @Override
         protected Boolean doInBackground(Void... params) {
             TrxBean trxBean=new TrxBean();
@@ -408,12 +416,14 @@ public class AccountActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
             if(aBoolean){
+                progressDialog.dismiss();
                 Intent intent=new Intent(AccountActivity.this,TransactionActivity.class);
                 intent.putExtra("refNo",refNo);
                 intent.putExtra("Amount",new Double(sharedPreferences2.getString("Amount","0")));
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }else{
+                progressDialog.dismiss();
                 Toast.makeText(AccountActivity.this, errorDesc, Toast.LENGTH_SHORT).show();
                 Intent intent=new Intent(AccountActivity.this,PaymentActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

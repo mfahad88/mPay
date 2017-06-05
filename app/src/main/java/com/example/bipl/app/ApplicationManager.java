@@ -39,8 +39,8 @@ import java.util.List;
 
 public class ApplicationManager {
     private final static String NAMESPACE = "http://ws.bi.com/";
-    //private final static String URL = "http://10.200.14.10:9082/BIPOS_WS/BiPosWSService";
-    private final static String URL = "http://10.7.255.77:59084/BIPOS_WS/BiPosWSService";
+    private final static String URL = "http://10.200.14.10:9082/BIPOS_WS/BiPosWSService";
+   // private final static String URL = "http://10.7.255.77:59084/BIPOS_WS/BiPosWSService";
 //      private final static String URL = "http://192.168.161.1:59084/BIPOS_WS/BiPosWSService";
     private final static String SOAP_ACTION = "http://ws.bi.com/";
     private final static int TIMEOUT=10000;

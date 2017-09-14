@@ -1,21 +1,17 @@
 package com.example.bipl.mpay;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.graphics.Typeface;
-import android.icu.text.NumberFormat;
-import android.icu.util.Currency;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Handler;
 import android.os.StrictMode;
 import android.support.annotation.IdRes;
 import android.support.annotation.RequiresApi;
@@ -24,26 +20,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Display;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bipl.BI_Controls.BIProgressDialog;
 import com.example.bipl.app.ApplicationManager;
 import com.example.bipl.data.AccountBean;
 import com.example.bipl.data.TrxBean;
 import com.example.bipl.util.EditDialogListener;
 import com.example.bipl.util.FontHelper;
+import com.example.bipl.util.Utility;
 import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,6 +45,7 @@ import org.json.JSONObject;
 
 public class PaymentActivity extends AppCompatActivity implements View.OnClickListener,EditDialogListener {
     int focusCheck=0;
+    Boolean TranStatus=false;
     EditText edit_amount,edit_cnic;
     TextView tvName,tvWelcome;
     SharedPreferences sharedpreferences,sharedpreferences2;
@@ -63,6 +58,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     public static final String MyPREFERENCES = "paymentPrefs" ;
     public static final int CONTEXT=Context.MODE_PRIVATE;
     private byte[] imgFinger;
+    private byte[] str_imgFinger;
     protected void clearSession() {
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.clear();
@@ -142,6 +138,20 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
           if(savedInstanceState!=null){
             savedInstanceState.clear();
         }
+        View decorView = getWindow().getDecorView();
+// Hide both the navigation bar and the status bar.
+// SYSTEM_UI_FLAG_FULLSCREEN is only available on Android 4.1 and higher, but as
+// a general rule, you should design your app to hide the status bar whenever you
+// hide the navigation bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                | View.SYSTEM_UI_FLAG_IMMERSIVE;
+        decorView.setSystemUiVisibility(uiOptions);
+
+
 
         setContentView(R.layout.activity_payment);
         layoutUpper=(LinearLayout)findViewById(R.id.layoutUpper);
@@ -207,9 +217,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         });
        
         try {
-            JSONObject jsonObject=new JSONObject(sharedpreferences.getString("UserLoginBean",""));
-            JSONObject jsonObject1=new JSONObject(jsonObject.getString("user"));
-            tvName.setText("Welcome "+jsonObject1.getString("userName"));
+            JSONObject jsonLoginData=new JSONObject(sharedpreferences.getString("UserLoginBean",""));
+            JSONObject jsonUser=new JSONObject(jsonLoginData.getString("user"));
+            tvName.setText("Welcome "+jsonUser.getString("userName"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -264,7 +274,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     edit_amount.append(((TextView) v).getText());
                 }
             }if(focusCheck==1){
-                if(edit_cnic.length()==5 || edit_cnic.length()==13) {
+                if((edit_cnic.length()==5 || edit_cnic.length()==13) &&  v.getId() != R.id.t9_key_backspace ) {
 
                 edit_cnic.setText(edit_cnic.getText()+"-");
                 }
@@ -288,10 +298,18 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     }
                 }
                 if(focusCheck==1) {
-                    Editable editable = edit_cnic.getText();
-                    int charCount = editable.length();
-                    if (charCount > 0) {
-                        editable.delete(charCount - 1, charCount);
+                    int charIndex;
+                    String text = edit_cnic.getText().toString();
+                    charIndex = text.length();
+
+
+//                    Editable editable = edit_cnic.getText();
+//                    int charCount = editable.length();
+                    if (edit_cnic.getText().length() > 0) {
+                        text =  text.substring(0,charIndex-1);
+                        edit_cnic.setText(text);
+//                        editable.delete(charCount - 1, charCount);
+
                     }
                 }
             }
@@ -342,11 +360,18 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
+    public void imageString(String inputText) {
+        str_imgFinger=inputText.getBytes();
+        Log.e("str_imgFinger>>>>",new String(str_imgFinger));
+    }
+
+    @Override
     public void capturedImage(Boolean status) {
         if (status){
             //dialogFragment.dismiss();
             new Trxasync().execute();
-        }else if(status==false){
+
+        }else{
             if(dialogFragment.isVisible()) {
                 dialogFragment.dismiss();
                 onRestart();
@@ -363,20 +388,20 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             JSONObject jsonObject = new JSONObject(sharedpreferences.getAll());
             JSONObject object = new JSONObject(jsonObject.getString("UserLoginBean"));
             JSONObject userObject = new JSONObject(object.getString("user"));
-            ApplicationManager.Logout(object.getString("token"), object.getString("loginId"), object.getInt("appId"), userObject.getString("mId"), userObject.getString("oId"), userObject.getString("uId"));
+            ApplicationManager.Logout(object.getString("token"), object.getString("loginId"), object.getInt("appId"), userObject.getString("mId"), userObject.getString("oId"), userObject.getString("uId"),getApplicationContext());
         }catch(Exception e){
             e.printStackTrace();
         }
     }
     public class Trxasync extends AsyncTask<Void,Void,Boolean> {
-        ProgressDialog progressDialog;
+        BIProgressDialog progressDialog;
         String amount;
         String cnic;
-        Boolean status=false;
         TrxBean trxBean;
         AccountBean accountBean;
         String errorDesc;
         SharedPreferences.Editor editor,editor1;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -387,11 +412,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             editor1.putString("Cnic",cnic);
             editor1.putString("Amount",amount);
             editor1.commit();
-            progressDialog=new ProgressDialog(PaymentActivity.this);
-            progressDialog.setTitle("Loading...");
-            progressDialog.setMessage("Validating CNIC...");
-            progressDialog.show();
-
+            progressDialog=new BIProgressDialog(PaymentActivity.this);
+            progressDialog.showProgressDialog("Loading...","Please Wait");
         }
 
         @SuppressLint("LongLogTag")
@@ -411,39 +433,63 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 trxBean.setmId(userObject.getString("mId"));
                 trxBean.setoId(userObject.getString("oId"));
                 trxBean.setuId(userObject.getString("uId"));
+                trxBean.setStan(Utility.getStan());
 
-            accountBean=ApplicationManager.Account_TRX(trxBean);
+            accountBean=ApplicationManager.Account_TRX(trxBean,getApplicationContext());
             if(Integer.parseInt(accountBean.getErrorCode())==0){
-                status=true;
+                TranStatus=true;
                 editor1.putString("finger", Base64.encodeToString(imgFinger,Base64.DEFAULT));
                 editor1.commit();
             }else{
-                status=false;
+                TranStatus=false;
                 errorDesc=accountBean.getErrorDesc();
             }
             }catch (Exception e){
-                status=false;
+                TranStatus=false;
                 errorDesc=e.getMessage();
                 e.printStackTrace();
             }
-            return status;
+            return TranStatus;
         }
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
+            Log.d("FingerActivity 2 ","file aBoolean "+aBoolean);
+            progressDialog.dismiss();
             if(aBoolean){
-                progressDialog.dismiss();
                 Intent i=new Intent(PaymentActivity.this,AccountActivity.class);
                 i.putExtra("accountBean",new Gson().toJson(accountBean));
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
             }else{
-                progressDialog.dismiss();
-                Toast.makeText(PaymentActivity.this, errorDesc, Toast.LENGTH_SHORT).show();
-                dialogFragment.dismiss();
-                onRestart();
-                initViews();
+
+                    Toast.makeText(PaymentActivity.this, errorDesc, Toast.LENGTH_SHORT).show();
+                    dialogFragment.dismiss();
+                    // Use the Builder class for convenient dialog construction
+                    AlertDialog.Builder builder = new AlertDialog.Builder(PaymentActivity.this);
+                    Log.d("FingerActivity 2 ", " After builder ");
+                    builder.setMessage("Please re-try").setTitle("Thumb Error.");
+                    builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User clicked OK button
+                            dialogFragment = new FingerActivity();
+                            dialogFragment.setCancelable(false);
+                            dialogFragment.show(getSupportFragmentManager(), "Finger");
+                        }
+                    });
+
+                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User cancelled the dialog
+                            dialogFragment.dismiss();
+                            onRestart();
+                            initViews();
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
             }
         }
     }

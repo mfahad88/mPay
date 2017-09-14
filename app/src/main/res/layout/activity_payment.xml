@@ -15,12 +15,14 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
             android:layout_weight=".5"
-            android:id="@+id/layoutUpper">
+            android:id="@+id/layoutUpper"
+            android:elevation=".5dp">
 
             <LinearLayout
                 android:layout_marginTop="15sp"
@@ -49,12 +51,12 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:layout_weight=".05">
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/powerred"
-                        android:id="@+id/imageViewPower"/>
-                        </LinearLayout>
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/powerred"
+                            android:id="@+id/imageViewPower"/>
+                    </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -85,57 +87,56 @@
             android:gravity="center_horizontal"
             android:layout_marginLeft="20sp"
             android:layout_marginRight="20sp">
-        <LinearLayout
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:orientation="vertical"
                 android:layout_weight=".15"
                 android:gravity="center_vertical"
                 android:id="@+id/subheadingLayout">
-            <TextView
-                android:text="Welcome"
-                android:textColor="@color/textColor"
-                android:textSize="24dp"
-                android:gravity="center_horizontal"
-                android:textStyle="bold"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textViewName" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            android:layout_weight=".2"
-            android:gravity="center_vertical"
-            android:id="@+id/layoutAmount">
-            <android.support.design.widget.TextInputLayout
-                android:layout_below="@+id/textViewName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/edittextAmountInput"
-                android:textColorHint="@color/textColor">
-
-                <EditText
+                <TextView
+                    android:text="Welcome"
+                    android:textColor="@color/textColor"
+                    android:textSize="24dp"
+                    android:gravity="center_horizontal"
+                    android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Amount"
-                    android:textSize="22sp"
-                    android:focusable="false"
-                    android:textColor="@color/textColor"
+                    android:id="@+id/textViewName" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                android:layout_weight=".2"
+                android:gravity="center_vertical"
+                android:id="@+id/layoutAmount">
+                <android.support.design.widget.TextInputLayout
+                    android:layout_below="@+id/textViewName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/edittextAmountInput"
                     android:textColorHint="@color/textColor"
-                    android:singleLine="true"
-                    android:ems="15"
-                    android:inputType="numberDecimal"
-                    android:layout_marginLeft="5sp"
-                    android:layout_marginRight="5sp"
-                    android:id="@+id/edittextAmount"
-                    />
-            </android.support.design.widget.TextInputLayout>
+                    android:padding="0dp">
 
-        </LinearLayout>
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Amount"
+                        android:focusable="false"
+                        android:textColorHint="@color/textColor"
+                        android:singleLine="true"
+                        android:ems="15"
+                        android:inputType="numberDecimal"
+                        android:layout_marginLeft="5sp"
+                        android:layout_marginRight="5sp"
+                        android:id="@+id/edittextAmount" />
+                </android.support.design.widget.TextInputLayout>
 
-         <LinearLayout
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:orientation="vertical"
@@ -143,31 +144,31 @@
                 android:id="@+id/layoutCnic"
                 android:gravity="center_vertical">
 
-             <android.support.design.widget.TextInputLayout
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:id="@+id/edittextCNICInput"
-                 android:textColorHint="@color/textColor">
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/edittextCNICInput"
+                    android:textColorHint="@color/textColor">
 
-             <EditText
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:hint="@string/cnic"
-                 android:textColor="@color/textColor"
-                 android:textColorHint="@color/textColor"
-                 android:textSize="22sp"
-                 android:singleLine="true"
-                 android:focusable="false"
-                 android:ems="15"
-                 android:inputType="number"
-                 android:layout_marginLeft="5sp"
-                 android:layout_marginRight="5sp"
-                 android:id="@+id/edittextCNIC"
-                 />
-             </android.support.design.widget.TextInputLayout>
-         </LinearLayout>
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/cnic"
+                        android:textColor="@color/textColor"
+                        android:textColorHint="@color/textColor"
+                        android:textSize="22sp"
+                        android:singleLine="true"
+                        android:focusable="false"
+                        android:ems="15"
+                        android:inputType="number"
+                        android:layout_marginLeft="5sp"
+                        android:layout_marginRight="5sp"
+                        android:id="@+id/edittextCNIC"
+                        />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
 
-         <LinearLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:orientation="vertical"
@@ -175,10 +176,10 @@
                 android:layout_marginLeft="10sp"
                 android:layout_marginRight="10sp"
                 android:id="@+id/layoutKeypad">
-             <include layout="@layout/layout_pinpad"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"/>
-         </LinearLayout>
+                <include layout="@layout/layout_pinpad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>

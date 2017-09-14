@@ -16,7 +16,7 @@
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="ANDROID.PERMISSION.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <compatible-screens>
         <screen
             android:screenDensity="hdpi"
@@ -32,20 +32,6 @@
             android:screenDensity="xxxhdpi"
             android:screenSize="xlarge"/>
     </compatible-screens>
-    <!--<compatible-screens>
-        &lt;!&ndash; all normal size screens &ndash;&gt;
-        <screen android:screenSize="normal" android:screenDensity="mdpi" />
-        <screen android:screenSize="normal" android:screenDensity="hdpi" />
-        <screen android:screenSize="normal" android:screenDensity="xhdpi" />
-        &lt;!&ndash; all large size screens &ndash;&gt;
-        <screen android:screenSize="large" android:screenDensity="mdpi" />
-        <screen android:screenSize="large" android:screenDensity="hdpi" />
-        <screen android:screenSize="large" android:screenDensity="xhdpi" />
-        &lt;!&ndash; all xlarge size screens &ndash;&gt;
-        <screen android:screenSize="xlarge" android:screenDensity="mdpi" />
-        <screen android:screenSize="xlarge" android:screenDensity="hdpi" />
-        <screen android:screenSize="xlarge" android:screenDensity="xhdpi" />
-    </compatible-screens>-->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/mpayicon"
@@ -54,6 +40,13 @@
         android:theme="@style/AppTheme"
         android:vmSafeMode="true"
         android:hardwareAccelerated="false">
+
+        <receiver android:name="com.example.bipl.app.myReceiver"  android:exported="true">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
         <activity android:name=".SplashActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,5 +1,7 @@
 package com.example.bipl.data;
 
+import java.util.Arrays;
+
 /**
  * Created by fahad on 5/2/2017.
  */
@@ -17,6 +19,7 @@ public class TrxBean {
     private String mId;
     private String oId;
     private String uId;
+    private String stan;
 
     public String getAmount() {
         return amount;
@@ -114,6 +117,14 @@ public class TrxBean {
         this.uId = uId;
     }
 
+    public String getStan() {
+        return stan;
+    }
+
+    public void setStan(String stan) {
+        this.stan = stan;
+    }
+
     @Override
     public String toString() {
         return "TrxBean{" +
@@ -124,11 +135,12 @@ public class TrxBean {
                 ", flag='" + flag + '\'' +
                 ", processCode=" + processCode +
                 ", productId=" + productId +
-                ", thumb='" + thumb + '\'' +
+                ", thumb=" + Arrays.toString(thumb) +
                 ", token='" + token + '\'' +
                 ", mId='" + mId + '\'' +
                 ", oId='" + oId + '\'' +
                 ", uId='" + uId + '\'' +
+                ", stan='" + stan + '\'' +
                 '}';
     }
 }

@@ -7,11 +7,15 @@
     android:layout_height="wrap_content"
     android:background="@drawable/border_frag"
     tools:context="com.example.bipl.mpay.FingerActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="300sp"
         android:background="#0273BC"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <LinearLayout
             android:layout_width="match_parent"

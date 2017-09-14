@@ -94,7 +94,7 @@
                     android:hint="@string/username"
                     android:textColor="@color/textColor"
                     android:singleLine="true"
-                    android:inputType="textCapCharacters"
+                    android:inputType="text"
                     android:layout_marginLeft="5sp"
                     android:layout_marginRight="5sp"
                     android:id="@+id/edittextUsername"
@@ -143,6 +143,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30sp"
                 android:layout_marginRight="30sp"
+                android:gravity="center"
                 android:textColor="@color/textColor"
                 android:background="@drawable/button_border"
                 android:id="@+id/buttonLogin" />

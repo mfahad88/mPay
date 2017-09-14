@@ -1,7 +1,7 @@
 package com.example.bipl.mpay;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,17 +25,15 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bipl.BI_Controls.BIProgressDialog;
 import com.example.bipl.app.ApplicationManager;
 import com.example.bipl.data.AccountBean;
-import com.example.bipl.data.PaymentBean;
 import com.example.bipl.data.TrxBean;
-import com.example.bipl.util.EditDialogListener;
 import com.example.bipl.util.FontHelper;
+import com.example.bipl.util.Utility;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.text.DecimalFormat;
 
 public class AccountActivity extends AppCompatActivity {
     EditText accName,accNum,accPoints,accpointWorth;
@@ -49,6 +47,7 @@ public class AccountActivity extends AppCompatActivity {
     String accountTitle,accountNum,Points,WorthPoints;
     final Handler handler=new Handler();
     byte[] imgFinger;
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -145,10 +144,23 @@ public class AccountActivity extends AppCompatActivity {
         editor2.commit();
 
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
+        View decorView = getWindow().getDecorView();
+// Hide both the navigation bar and the status bar.
+// SYSTEM_UI_FLAG_FULLSCREEN is only available on Android 4.1 and higher, but as
+// a general rule, you should design your app to hide the status bar whenever you
+// hide the navigation bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                | View.SYSTEM_UI_FLAG_IMMERSIVE;
+        decorView.setSystemUiVisibility(uiOptions);
 
         sharedPreferences = getSharedPreferences(LoginActivity.MyPREFERENCES, Context.MODE_PRIVATE);
         sharedPreferences2=getSharedPreferences(PaymentActivity.MyPREFERENCES,PaymentActivity.CONTEXT);
@@ -244,6 +256,7 @@ public class AccountActivity extends AppCompatActivity {
                 Intent intent=new Intent(AccountActivity.this,PaymentActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                overridePendingTransition(android.support.design.R.anim.abc_slide_in_top,android.support.design.R.anim.abc_slide_out_top);
 
             }
         },60000);
@@ -254,6 +267,7 @@ public class AccountActivity extends AppCompatActivity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 handler.removeCallbacksAndMessages(null);
                 startActivity(intent);
+                overridePendingTransition(android.support.design.R.anim.abc_slide_in_top,android.support.design.R.anim.abc_slide_out_top);
             }
         });
 
@@ -270,7 +284,7 @@ public class AccountActivity extends AppCompatActivity {
             JSONObject jsonObject = new JSONObject(sharedPreferences.getAll());
             JSONObject object = new JSONObject(jsonObject.getString("UserLoginBean"));
             JSONObject userObject = new JSONObject(object.getString("user"));
-            ApplicationManager.Logout(object.getString("token"), object.getString("loginId"), object.getInt("appId"), userObject.getString("mId"), userObject.getString("oId"), userObject.getString("uId"));
+            ApplicationManager.Logout(object.getString("token"), object.getString("loginId"), object.getInt("appId"), userObject.getString("mId"), userObject.getString("oId"), userObject.getString("uId"),getApplicationContext());
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -279,14 +293,12 @@ public class AccountActivity extends AppCompatActivity {
 
     public class paymentAccount extends AsyncTask<Void,Void,Boolean>{
         String errorDesc;
-        ProgressDialog progressDialog;
+        BIProgressDialog progressDialog;
        @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog=new ProgressDialog(AccountActivity.this);
-            progressDialog.setMessage("Please Wait...");
-            progressDialog.setTitle("Loading...");
-            progressDialog.show();
+           progressDialog=new BIProgressDialog(AccountActivity.this);
+           progressDialog.showProgressDialog("Loading...","Please Wait");
         }
 
         @Override
@@ -319,8 +331,9 @@ public class AccountActivity extends AppCompatActivity {
                 trxBean.setDescription("mPAY");
                 trxBean.setProcessCode(0);
                 trxBean.setProductId(1);
+                trxBean.setStan(Utility.getStan());
                 Log.e("PaymentBean",trxBean.toString());
-                accountBean=ApplicationManager.Account_TRX(trxBean);
+                accountBean=ApplicationManager.Account_TRX(trxBean,getApplicationContext());
                 if(Integer.parseInt(accountBean.getErrorCode())==0 && Integer.parseInt(accountBean.getProcessCode())==1){
                     refNo= String.valueOf(accountBean.getTrxNoImal());
                     status=true;
@@ -328,10 +341,13 @@ public class AccountActivity extends AppCompatActivity {
                     status=false;
                     errorDesc=accountBean.getErrorDesc();
                 }
-
+                progressDialog.dismiss();
             } catch (JSONException e) {
                 e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
             return status;
         }
 
@@ -339,33 +355,32 @@ public class AccountActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
             if(aBoolean){
-                progressDialog.dismiss();
                Intent intent=new Intent(AccountActivity.this,TransactionActivity.class);
                 intent.putExtra("refNo",refNo);
                 intent.putExtra("Amount",new Double(sharedPreferences2.getString("Amount","0")));
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                overridePendingTransition(android.support.design.R.anim.abc_slide_in_top,android.support.design.R.anim.abc_slide_out_top);
+
             }else{
-                progressDialog.dismiss();
                 Toast.makeText(AccountActivity.this, errorDesc, Toast.LENGTH_LONG).show();
                 Intent intent=new Intent(AccountActivity.this,PaymentActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 handler.removeCallbacksAndMessages(null);
                 startActivity(intent);
+                overridePendingTransition(android.support.design.R.anim.abc_slide_in_top,android.support.design.R.anim.abc_slide_out_top);
             }
         }
     }
 
     public class paymentLoyality extends AsyncTask<Void,Void,Boolean>{
         String errorDesc;
-        ProgressDialog progressDialog;
+        BIProgressDialog progressDialog;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog=new ProgressDialog(AccountActivity.this);
-            progressDialog.setMessage("Please Wait...");
-            progressDialog.setTitle("Loading...");
-            progressDialog.show();
+            progressDialog=new BIProgressDialog(AccountActivity.this);
+            progressDialog.showProgressDialog("Loading...","Please Wait");
         }
         @Override
         protected Boolean doInBackground(Void... params) {
@@ -396,8 +411,9 @@ public class AccountActivity extends AppCompatActivity {
                 trxBean.setDescription("mPAY");
                 trxBean.setProcessCode(0);
                 trxBean.setProductId(1);
+                trxBean.setStan(Utility.getStan());
                 Log.e("PaymentBean",trxBean.toString());
-                accountBean=ApplicationManager.Account_TRX(trxBean);
+                accountBean=ApplicationManager.Account_TRX(trxBean,getApplicationContext());
                 if(Integer.parseInt(accountBean.getErrorCode())==0 && Integer.parseInt(accountBean.getProcessCode())==1){
                     refNo= String.valueOf(accountBean.getTrxNoImal());
                     status=true;
@@ -408,6 +424,8 @@ public class AccountActivity extends AppCompatActivity {
 
             } catch (JSONException e) {
                 e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             return status;
         }
@@ -415,20 +433,22 @@ public class AccountActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
+            progressDialog.dismiss();
             if(aBoolean){
-                progressDialog.dismiss();
+
                 Intent intent=new Intent(AccountActivity.this,TransactionActivity.class);
                 intent.putExtra("refNo",refNo);
                 intent.putExtra("Amount",new Double(sharedPreferences2.getString("Amount","0")));
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                overridePendingTransition(android.support.design.R.anim.abc_slide_in_top,android.support.design.R.anim.abc_slide_out_top);
             }else{
-                progressDialog.dismiss();
                 Toast.makeText(AccountActivity.this, errorDesc, Toast.LENGTH_SHORT).show();
                 Intent intent=new Intent(AccountActivity.this,PaymentActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 handler.removeCallbacksAndMessages(null);
                 startActivity(intent);
+                overridePendingTransition(android.support.design.R.anim.abc_slide_in_top,android.support.design.R.anim.abc_slide_out_top);
             }
         }
     }

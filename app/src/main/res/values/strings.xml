@@ -23,6 +23,7 @@
     <string name="btn_backspace">Back</string>
     <string name="number_dot">.</string>
     <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
     <string name="btn_done">Done</string>
     <string name="loyality">Loyality</string>
     <string name="account">Account</string>
